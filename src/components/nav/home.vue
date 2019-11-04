@@ -1,7 +1,7 @@
 <template>
   <div class="win">
     <div class="container">
-          我把首页修改了
+          我把首页修改了vscoede
     </div>
   </div>
 </template>
