@@ -16,7 +16,7 @@ export default {
   computed: {},
   methods: {},
   created() {
-    console.log(this.$route.query);
+    // console.log(this.$route.query);
     this.list = list;
   }
 };
