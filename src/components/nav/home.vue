@@ -1,9 +1,7 @@
 <template>
   <div class="win">
     <div class="container">
-      <div class="item"></div>
-      <div class="item"></div>
-      <div class="item"></div>aaa
+          aaaasdasdas
     </div>
   </div>
 </template>
