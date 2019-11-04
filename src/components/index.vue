@@ -4,9 +4,11 @@
       <Header />
     </div>
     <div class="_body">
-      <router-view class="bod"></router-view>
+      <div class="bod">
+        <router-view class="bod_bod"></router-view>
+      </div>
       <div class="right">
-      <Right />
+        <Right />
       </div>
     </div>
     <div class="_head">
@@ -30,7 +32,6 @@ export default {
 <style scoped lang="scss">
 .win {
   .head {
-    background-color: red;
     width: 100%;
   }
   ._body {
@@ -45,12 +46,36 @@ export default {
       top: 0;
     }
     .bod {
-      background-color: #6b6c70;
       border-radius: 10px;
       margin-right: 320px;
-      min-height: 800px;
-      padding: 10px;
+      background-color: #6b6c70;
+      padding: 1vh 10px;
       box-sizing: border-box;
+      height: 80vh;
+      .bod_bod {
+        height: 100%;
+        box-sizing: border-box;
+        overflow: auto;
+        &::-webkit-scrollbar {
+          /*滚动条整体样式*/
+          width: 4px; /*高宽分别对应横竖滚动条的尺寸*/
+          height: 4px;
+          scrollbar-arrow-color: red;
+        }
+        &::-webkit-scrollbar-thumb {
+          /*滚动条里面小方块*/
+          border-radius: 5px;
+          -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+          background: rgba(0, 0, 0, 0.2);
+          scrollbar-arrow-color: red;
+        }
+        &::-webkit-scrollbar-track {
+          /*滚动条里面轨道*/
+          -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+          border-radius: 0;
+          background: rgba(0, 0, 0, 0.1);
+        }
+      }
     }
   }
 }

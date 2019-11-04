@@ -25,14 +25,23 @@
       <el-menu-item index="/album">相册</el-menu-item>
       <el-menu-item index="/about">关于我</el-menu-item>
     </el-menu>
-    <el-dropdown trigger="click" @command="addNew">
+    <div class="block">
+      <span class="demonstration">hover 触发子菜单</span>
+      <el-cascader
+        v-model="selectValue"
+        :options="options"
+        :props="{ expandTrigger: 'hover' }"
+        @change="selectChange"
+      ></el-cascader>
+    </div>
+    <!-- <el-dropdown trigger="click" @command="addNew">
       <el-button type="primary" class="addnewbtn" icon="el-icon-plus">新增内容</el-button>
       <el-dropdown-menu slot="dropdown">
         <el-dropdown-item icon="el-icon-coordinate" command="skill">技术贴</el-dropdown-item>
         <el-dropdown-item icon="el-icon-edit" command="notepad">随笔</el-dropdown-item>
         <el-dropdown-item icon="el-icon-picture-outline" command="album">图片</el-dropdown-item>
       </el-dropdown-menu>
-    </el-dropdown>
+    </el-dropdown>-->
   </div>
 </template>
 
@@ -41,11 +50,34 @@ export default {
   name: "Header",
   data() {
     return {
-      activeIndex: "/home"
+      activeIndex: "/home",
+      selectValue: "",
+      form:{},
+      options: [
+        {
+          value: "jishu",
+          label: "技术",
+          children: [
+            {
+              value: "css",
+              label: "css"
+            },
+            {
+              value: "vue",
+              label: "vue"
+            },
+            {
+              value: "react",
+              label: "react"
+            }
+          ]
+        }
+      ]
     };
   },
   computed: {},
   methods: {
+    selectChange() {},
     handleSelect(key, keyPath) {
       if (keyPath[0] == this.$route.path) return;
       this.$router.push({
@@ -56,14 +88,13 @@ export default {
       });
     },
     addNew(type) {
-      console.log(type);
       this.$router.push({
         path: "/newlyadd",
         query: {
           type
         }
       });
-      this.activeIndex='';
+      this.activeIndex = "";
     }
   },
   created() {
