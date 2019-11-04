@@ -1,7 +1,7 @@
 <template>
   <div class="win">
     <div class="container">
-          aaaasdasdas
+          我把首页修改了
     </div>
   </div>
 </template>
