@@ -4,7 +4,7 @@
       :default-active="activeIndex"
       class="el-menu-demo"
       mode="horizontal"
-      @select="handleSelect"
+      @select="navTabSelect"
       background-color="#1c1c1c"
       text-color="#fff"
       active-text-color="#ffd04b"
@@ -15,22 +15,35 @@
       <el-menu-item index="/album">相册</el-menu-item>
       <el-menu-item index="/about">关于我</el-menu-item>
     </el-menu>
-    <el-dropdown trigger="click" @command="addNew">
-      <el-button type="primary" class="addnewbtn" icon="el-icon-plus">新增内容</el-button>
-      <el-dropdown-menu slot="dropdown">
-        <el-dropdown-item icon="el-icon-coordinate" command="skill">技术贴/随笔</el-dropdown-item>
-        <el-dropdown-item icon="el-icon-picture-outline" command="album">图片</el-dropdown-item>
-      </el-dropdown-menu>
-    </el-dropdown>
+    <el-button type="primary" class="addnewbtn" @click="addNew" icon="el-icon-plus">新增内容</el-button>
 
     <!-- 新增内容/随笔弹窗 -->
     <el-dialog
-      title="添加新内容"
       :visible.sync="addNewPopup"
-      width="40%"
+      width="70%"
       :before-close="()=>{addNewPopup=false}"
+      :close-on-click-modal="false"
+      class="add_new_pop"
     >
-      <div class="editorElem" ref="editorElem" style="text-align:left;"></div>
+      <div class="title">
+        <el-form>
+          <div class="title_form_row">
+            <el-cascader
+              v-model="addNewType"
+              :options="addNewArr"
+              :props="{ expandTrigger: 'hover' }"
+              @change="cascaderChange"
+              placeholder="请选择类型"
+            ></el-cascader>
+            <el-input v-model="form.name" class="title_text" placeholder="请输入标题"></el-input>
+          </div>
+        </el-form>
+      </div>
+      <div v-show="addNewType&&addNewType!='tupian'" class="editor_elem" ref="editorElem"></div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="addNewPopup = false">取 消</el-button>
+        <el-button type="primary" @click="saveAddNew">保 存</el-button>
+      </span>
     </el-dialog>
   </div>
 </template>
@@ -42,15 +55,44 @@ export default {
   data() {
     return {
       activeIndex: "/home",
+      addNewPopup: true,
       addNewType: "",
-      addNewPopup: false,
       editor: null,
-      editorContent: ""
+      addNewArr: [
+        {
+          label: "技术",
+          value: "jishu",
+          children: [
+            {
+              label: "CSS",
+              value: "css"
+            }
+          ]
+        },
+        {
+          label: "图片",
+          value: "tupian"
+        },
+        {
+          label: "随笔",
+          value: "suibi"
+        }
+      ],
+      form: {}
     };
   },
   computed: {},
+  // watch: {
+  //   addNewType() {
+  //     if (this.addNewType[0] === "tupian") {
+  //       console.log("开放上传图片组件");
+  //     } else {
+  //       this.initEditor();
+  //     }
+  //   }
+  // },
   methods: {
-    handleSelect(key, keyPath) {
+    navTabSelect(key, keyPath) {
       if (keyPath[0] == this.$route.path) return;
       this.$router.push({
         path: keyPath[0],
@@ -59,30 +101,52 @@ export default {
         }
       });
     },
-    addNew(type) {
-      this.addNewType = type;
+    cascaderChange(e) {
+      this.addNewType = e;
+    },
+    addNew() {
       this.addNewPopup = true;
       setTimeout(() => {
-      this.initEditor();
-        
+        this.initEditor();
       }, 1);
-      return;
-      this.$router.push({
-        path: "/newlyadd"
-      });
-      this.activeIndex = "";
     },
     initEditor() {
-      console.log(this.$refs.editorElem);
-      // this.editor = new E(this.$refs.editorElem);
-      // this.editor.customConfig.onchange = html => {
-      //   this.editorContent = html;
-      //   console.log(this.editorContent);
-      // };
-      // this.editor.customConfig.uploadImgShowBase64 = true;
-      // this.editor.customConfig.zIndex = 100;
-      // this.editor.create();
+      this.$refs.editorElem.innerHTML = "";
+      this.editor = new E(this.$refs.editorElem);
+      this.editor.customConfig.onchange = html => {
+        this.form.text = html;
+        console.log(this.editorContent);
+      };
+      this.editor.customConfig.uploadImgShowBase64 = true;
+      this.editor.customConfig.zIndex = 100;
+      this.editor.customConfig.menus = [
+        "bold",
+        "fontSize",
+        "fontName",
+        "italic",
+        "underline",
+        "foreColor",
+        "backColor",
+        "link",
+        "list",
+        "justify",
+        "quote",
+        "image",
+        "table",
+        "code"
+      ];
+      this.editor.create();
+    },
+    // 保存
+    saveAddNew() {
+      this.form.type = this.addNewType;
+      console.log(this.form);
     }
+  },
+  mounted() {
+    this.$nextTick(() => {
+      this.initEditor();
+    });
   },
   created() {
     this.activeIndex = this.$route.path;
@@ -120,6 +184,21 @@ export default {
   }
   >>> .w-e-text-container p {
     color: #666;
+  }
+  .add_new_pop {
+    .title {
+      .title_form_row {
+        // display: flex;
+        // justify-content: space-between;
+        // align-items: center;
+        .title_text {
+          margin: 10px 0;
+        }
+      }
+    }
+    .editor_elem {
+      text-align: left;
+    }
   }
 }
 </style>

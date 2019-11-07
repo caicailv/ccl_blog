@@ -10,7 +10,7 @@
 <script>
 export default {
   name: "Newlyadd",
-  data() {
+  data() { 
     return {
       form: {},
       editor: null,
