@@ -25,21 +25,39 @@
       :close-on-click-modal="false"
       class="add_new_pop"
     >
-      <div class="title">
-        <el-form>
-          <div class="title_form_row">
-            <el-cascader
-              v-model="addNewType"
-              :options="addNewArr"
-              :props="{ expandTrigger: 'hover' }"
-              @change="cascaderChange"
-              placeholder="请选择类型"
-            ></el-cascader>
-            <el-input v-model="form.name" class="title_text" placeholder="请输入标题"></el-input>
-          </div>
-        </el-form>
+      <div class="row">
+        <div class="title">
+          <el-form>
+            <div class="title_form_row">
+              <el-cascader
+                v-model="addNewType"
+                :options="addNewArr"
+                :props="{ expandTrigger: 'hover' }"
+                @change="cascaderChange"
+                placeholder="请选择类型"
+              ></el-cascader>
+              <el-input v-model="form.name" class="title_text" placeholder="请输入标题"></el-input>
+            </div>
+          </el-form>
+        </div>
+        <div v-show="addNewType[0]!='tupian'" class="editor_elem" ref="editorElem"></div>
+        <div v-if="addNewType[0]==='tupian'" >
+          <el-upload
+            class="upload-demo"
+            drag
+            action="https://jsonplaceholder.typicode.com/posts/"
+            multiple
+          >
+            <i class="el-icon-upload"></i>
+            <div class="el-upload__text">
+              将文件拖到此处，或
+              <em>点击上传</em>
+            </div>
+            <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
+          </el-upload>
+        </div>
       </div>
-      <div v-show="addNewType&&addNewType!='tupian'" class="editor_elem" ref="editorElem"></div>
+
       <span slot="footer" class="dialog-footer">
         <el-button @click="addNewPopup = false">取 消</el-button>
         <el-button type="primary" @click="saveAddNew">保 存</el-button>
@@ -56,7 +74,7 @@ export default {
     return {
       activeIndex: "/home",
       addNewPopup: true,
-      addNewType: "",
+      addNewType: [],
       editor: null,
       addNewArr: [
         {
@@ -82,15 +100,15 @@ export default {
     };
   },
   computed: {},
-  // watch: {
-  //   addNewType() {
-  //     if (this.addNewType[0] === "tupian") {
-  //       console.log("开放上传图片组件");
-  //     } else {
-  //       this.initEditor();
-  //     }
-  //   }
-  // },
+  watch: {
+    addNewType() {
+      if (this.addNewType[0] === "tupian") {
+        console.log("开放上传图片组件");
+      } else {
+        this.initEditor();
+      }
+    }
+  },
   methods: {
     navTabSelect(key, keyPath) {
       if (keyPath[0] == this.$route.path) return;
@@ -115,7 +133,7 @@ export default {
       this.editor = new E(this.$refs.editorElem);
       this.editor.customConfig.onchange = html => {
         this.form.text = html;
-        console.log(this.editorContent);
+        console.log(this.form.text);
       };
       this.editor.customConfig.uploadImgShowBase64 = true;
       this.editor.customConfig.zIndex = 100;
@@ -186,18 +204,36 @@ export default {
     color: #666;
   }
   .add_new_pop {
-    .title {
-      .title_form_row {
-        // display: flex;
-        // justify-content: space-between;
-        // align-items: center;
-        .title_text {
-          margin: 10px 0;
+    .row {
+      min-height: 200px !important;
+      max-height: 550px !important;
+      overflow-y: auto;
+      .title {
+        .title_form_row {
+          // display: flex;
+          // justify-content: space-between;
+          // align-items: center;
+          .title_text {
+            margin: 10px 0;
+          }
         }
       }
-    }
-    .editor_elem {
-      text-align: left;
+      .editor_elem {
+        text-align: left;
+      }
+
+      >>> .w-e-text-container {
+        height: auto !important;
+        min-height: 200px !important;
+        max-height: 250px !important;
+        overflow-y: auto;
+      }
+      >>> .w-e-text::-webkit-scrollbar {
+        display: none;
+      }
+      >>> .w-e-text-container::-webkit-scrollbar {
+        display: none;
+      }
     }
   }
 }
