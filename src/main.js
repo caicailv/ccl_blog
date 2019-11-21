@@ -6,15 +6,16 @@ import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import '@/assets/css/reset.css';
 import router from './router';
+import '@/assets/js/axios.config';
 import Axios from 'axios';
 //axios配置 
-let isPattern = process.env.NODE_ENV;
-if (isPattern=='development') {
-  Axios.defaults.baseURL = 'http://localhost:3001/';
-} else {
-  Axios.defaults.baseURL = 'http://www.caicailv.cn/';
-}
-Vue.prototype.$axios = Axios;
+// let isPattern = process.env.NODE_ENV;
+// if (isPattern=='development') {
+//   Axios.defaults.baseURL = 'http://localhost:3001/';
+// } else {
+//   Axios.defaults.baseURL = 'http://www.caicailv.cn/';
+// }
+// Vue.prototype.$axios = Axios;
 
 // 公用组件
 import Header from '@/components/partials/header'

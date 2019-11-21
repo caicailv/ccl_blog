@@ -41,7 +41,7 @@
           </el-form>
         </div>
         <div v-show="addNewType[0]!='tupian'" class="editor_elem" ref="editorElem"></div>
-        <div v-if="addNewType[0]==='tupian'" >
+        <div v-if="addNewType[0]==='tupian'">
           <el-upload
             class="upload-demo"
             drag
@@ -73,7 +73,7 @@ export default {
   data() {
     return {
       activeIndex: "/home",
-      addNewPopup: true,
+      addNewPopup: false,
       addNewType: [],
       editor: null,
       addNewArr: [
@@ -129,6 +129,7 @@ export default {
       }, 1);
     },
     initEditor() {
+      if (this.addNewPopup === false) return;
       this.$refs.editorElem.innerHTML = "";
       this.editor = new E(this.$refs.editorElem);
       this.editor.customConfig.onchange = html => {
@@ -166,8 +167,17 @@ export default {
       this.initEditor();
     });
   },
-  created() {
+  created() { 
     this.activeIndex = this.$route.path;
+    // this.$axios
+    //   .get("/v1/album")
+    //   .then(res => { 
+    //     console.log(res);
+    //     // this.imgList = res.data;
+    //   })
+    //   .catch(err => {
+    //     console.log(err);
+    //   });
   }
 };
 </script>
