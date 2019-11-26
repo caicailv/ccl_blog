@@ -2,7 +2,6 @@
   <div class="win">
     <div v-for="item,index in imgList" :key="item.id" class="imgList">
       <el-image class="imgrow" :src="item.img_scr" :preview-src-list="[aImgSrc[index]]">
-        
       </el-image>
       <p class="title">{{item.title}}</p>
       <div class="zy"></div>
@@ -32,7 +31,7 @@ export default {
   created() {
     this.$axios.get("/v1/album")
     .then(res=>{
-      this.imgList = res.data;
+      this.imgList = res;
     })
     .catch(err=>{
       console.log(err);

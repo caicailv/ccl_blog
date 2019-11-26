@@ -43,17 +43,13 @@
         <div v-show="addNewType[0]!='tupian'" class="editor_elem" ref="editorElem"></div>
         <div v-if="addNewType[0]==='tupian'">
           <el-upload
-            class="upload-demo"
-            drag
-            action="https://jsonplaceholder.typicode.com/posts/"
-            multiple
+            action="http://localhost:3001/file/uploading"
+            list-type="picture-card"
+            :on-preview="viewBigImg"
+            :on-remove="removeImg"
+            :on-success="successImg"
           >
-            <i class="el-icon-upload"></i>
-            <div class="el-upload__text">
-              将文件拖到此处，或
-              <em>点击上传</em>
-            </div>
-            <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
+            <i class="el-icon-plus"></i>
           </el-upload>
         </div>
       </div>
@@ -62,6 +58,9 @@
         <el-button @click="addNewPopup = false">取 消</el-button>
         <el-button type="primary" @click="saveAddNew">保 存</el-button>
       </span>
+    </el-dialog>
+    <el-dialog :visible.sync="dialogVisible">
+      <img width="80%" :src="dialogImageUrl" alt />
     </el-dialog>
   </div>
 </template>
@@ -75,7 +74,10 @@ export default {
       activeIndex: "/home",
       addNewPopup: false,
       addNewType: [],
+      dialogImageUrl: "",
       editor: null,
+      dialogVisible: false,
+      imgArr:[],//上传的图片的路径的集合
       addNewArr: [
         {
           label: "技术",
@@ -103,7 +105,8 @@ export default {
   watch: {
     addNewType() {
       if (this.addNewType[0] === "tupian") {
-        console.log("开放上传图片组件");
+        // console.log("开放上传图片组件");
+        this.imgArr = [];//初始化图片容器
       } else {
         this.initEditor();
       }
@@ -134,7 +137,7 @@ export default {
       this.editor = new E(this.$refs.editorElem);
       this.editor.customConfig.onchange = html => {
         this.form.text = html;
-        console.log(this.form.text);
+        // console.log(this.form.text);
       };
       this.editor.customConfig.uploadImgShowBase64 = true;
       this.editor.customConfig.zIndex = 100;
@@ -156,9 +159,35 @@ export default {
       ];
       this.editor.create();
     },
+    // 图片上传成功回调
+    successImg(res,file,fileList) {
+      this.imgArr.push(res.data.url);
+      console.log(file);
+      console.log(fileList);
+    },
+    // 删除图片回调
+    removeImg(file, fileList) {
+      console.log(file, fileList);
+      // this.imgArr.push(res.data.url);
+    },
+    // 打开图片展示器
+    viewBigImg(file) {
+      this.dialogImageUrl = file.url;
+      this.dialogVisible = true;
+    },
     // 保存
     saveAddNew() {
+      // 把类型，内容或者图片列表写入数据库，
+      if(this.form.name===undefined||this.form.name===""){
+        return this.$message("请输入标题")
+      }
       this.form.type = this.addNewType;
+
+      if(this.addNewType[0] === "tupian"){
+        if(this.imgArr.length===0){
+          return this.$message("请上传图片")
+        }
+      }
       console.log(this.form);
     }
   },
@@ -167,11 +196,11 @@ export default {
       this.initEditor();
     });
   },
-  created() { 
+  created() {
     this.activeIndex = this.$route.path;
     // this.$axios
     //   .get("/v1/album")
-    //   .then(res => { 
+    //   .then(res => {
     //     console.log(res);
     //     // this.imgList = res.data;
     //   })
