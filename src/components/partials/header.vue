@@ -77,7 +77,7 @@ export default {
       dialogImageUrl: "",
       editor: null,
       dialogVisible: false,
-      imgArr:[],//上传的图片的路径的集合
+      imgArr: [], //上传的图片的路径的集合
       addNewArr: [
         {
           label: "技术",
@@ -106,7 +106,7 @@ export default {
     addNewType() {
       if (this.addNewType[0] === "tupian") {
         // console.log("开放上传图片组件");
-        this.imgArr = [];//初始化图片容器
+        this.imgArr = []; //初始化图片容器
       } else {
         this.initEditor();
       }
@@ -160,7 +160,7 @@ export default {
       this.editor.create();
     },
     // 图片上传成功回调
-    successImg(res,file,fileList) {
+    successImg(res, file, fileList) {
       this.imgArr.push(res.data.url);
       console.log(file);
       console.log(fileList);
@@ -178,17 +178,46 @@ export default {
     // 保存
     saveAddNew() {
       // 把类型，内容或者图片列表写入数据库，
-      if(this.form.name===undefined||this.form.name===""){
-        return this.$message("请输入标题")
+      if(this.addNewType.length===0) return this.$message('请选择新增内容的类型') 
+      if (this.form.name === undefined || this.form.name === "") {
+        return this.$message("请输入标题");
       }
-      this.form.type = this.addNewType;
-
-      if(this.addNewType[0] === "tupian"){
-        if(this.imgArr.length===0){
-          return this.$message("请上传图片")
-        }
+      // 图片
+      if (this.addNewType[0] === "tupian") {
+        if (this.imgArr.length == 0) return this.$message("请至少上传一张图片");
+        this.saveImg();
+      } else {
+        //技术
+        if (this.form.text === undefined||this.form.text === '') return this.$message("请输入内容");
+        this.saveSkill();
       }
-      console.log(this.form);
+    },
+    // 添加技术博客
+    saveSkill() {
+      //分类 标题，编辑器
+      this.$axios.post("/add_skill", {
+        type: this.addNewType,
+        title: this.form.name,
+        content: this.form.text
+      })
+      .then(res => {
+        console.log(res);
+      }).catch(err => {
+        console.log(err);
+      });
+    },
+    // 添加图片
+    saveImg() {
+      // 标题，路径集合
+      this.$axios.post("/add_img", {
+        title: this.form.name,
+        img_arr: this.imgArr
+      });
+      then(res => {
+        console.log(res);
+      }).catch(err => {
+        console.log(err);
+      });
     }
   },
   mounted() {
@@ -198,15 +227,6 @@ export default {
   },
   created() {
     this.activeIndex = this.$route.path;
-    // this.$axios
-    //   .get("/v1/album")
-    //   .then(res => {
-    //     console.log(res);
-    //     // this.imgList = res.data;
-    //   })
-    //   .catch(err => {
-    //     console.log(err);
-    //   });
   }
 };
 </script>
