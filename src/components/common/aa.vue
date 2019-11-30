@@ -1,6 +1,6 @@
 <template>
   <div class="win">
-    
+    aaa
   </div>
 </template>
 
