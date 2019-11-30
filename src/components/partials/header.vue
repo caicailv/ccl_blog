@@ -178,7 +178,8 @@ export default {
     // 保存
     saveAddNew() {
       // 把类型，内容或者图片列表写入数据库，
-      if(this.addNewType.length===0) return this.$message('请选择新增内容的类型') 
+      if (this.addNewType.length === 0)
+        return this.$message("请选择新增内容的类型");
       if (this.form.name === undefined || this.form.name === "") {
         return this.$message("请输入标题");
       }
@@ -188,23 +189,33 @@ export default {
         this.saveImg();
       } else {
         //技术
-        if (this.form.text === undefined||this.form.text === '') return this.$message("请输入内容");
+        if (this.form.text === undefined || this.form.text === "")
+          return this.$message("请输入内容");
         this.saveSkill();
       }
     },
     // 添加技术博客
     saveSkill() {
       //分类 标题，编辑器
-      this.$axios.post("/add_skill", {
-        type: this.addNewType,
-        title: this.form.name,
-        content: this.form.text
-      })
-      .then(res => {
-        console.log(res);
-      }).catch(err => {
-        console.log(err);
-      });
+      this.$axios
+        .post("/add_skill", {
+          type: this.addNewType,
+          title: this.form.name,
+          content: this.form.text
+        })
+        .then(res => {
+          if (res.status) {
+            this.$message("上传成功!");
+            this.form.name = "";
+            this.addNewArr = [];
+            this.addNewPopup = false;
+          } else {
+            this.$message(res.msg);
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
     },
     // 添加图片
     saveImg() {
@@ -214,7 +225,15 @@ export default {
         img_arr: this.imgArr
       });
       then(res => {
-        console.log(res);
+        if (res.status) {
+          this.$message("上传成功!");
+          this.form.name = "";
+          this.addNewArr = [];
+          this.imgArr = [];
+          this.addNewPopup = false;
+        } else {
+          this.$message(res.msg);
+        }
       }).catch(err => {
         console.log(err);
       });
