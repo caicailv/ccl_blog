@@ -106,7 +106,7 @@ export default {
     addNewType() {
       if (this.addNewType[0] === "tupian") {
         // console.log("开放上传图片组件");
-        this.imgArr = []; //初始化图片容器
+        this.imgArr = []; //初始化图片容器 了
       } else {
         this.initEditor();
       }
