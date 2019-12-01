@@ -229,7 +229,7 @@ export default {
           this.$message("上传成功!");
           this.form.name = "";
           this.addNewArr = [];
-          this.imgArr = [];
+          this.imgArr = []; 
           this.addNewPopup = false;
         } else {
           this.$message(res.msg);
