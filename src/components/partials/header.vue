@@ -231,7 +231,7 @@ export default {
           this.addNewArr = [];
           this.imgArr = []; 
           this.addNewPopup = false;
-          console.log('我提交！');
+          console.log('我提交');
         } else {
           this.$message(res.msg);
         }
