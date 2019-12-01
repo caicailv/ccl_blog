@@ -222,7 +222,7 @@ export default {
       // 标题，路径集合
       this.$axios.post("/add_img", {
         title: this.form.name,
-        img_arr: this.imgArr
+        img_arr: this.imgArr,
       });
       then(res => {
         if (res.status) {
@@ -231,6 +231,7 @@ export default {
           this.addNewArr = [];
           this.imgArr = []; 
           this.addNewPopup = false;
+          console.log('我提交！');
         } else {
           this.$message(res.msg);
         }
