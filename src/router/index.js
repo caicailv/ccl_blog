@@ -7,7 +7,7 @@ import Notepad from '@/components/nav/notepad'
 import Album from '@/components/nav/album'
 import About from '@/components/nav/about'
 import Skill from '@/components/nav/skill'
-import Newlyadd from '@/components/newlyadd'
+import detail from '@/components/detail'
 Vue.use(Router)
 /* 
 
@@ -41,8 +41,8 @@ export default new Router({
           component: About
         },
         {
-          path: 'newlyadd',
-          component: Newlyadd
+          path: 'detail',
+          component: detail
         },
       ]
     },

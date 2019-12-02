@@ -105,8 +105,7 @@ export default {
   watch: {
     addNewType() {
       if (this.addNewType[0] === "tupian") {
-        // console.log("开放上传图片组件");
-        this.imgArr = []; //初始化图片容器 醃
+        this.imgArr = []; //初始化图片容器
       } else {
         this.initEditor();
       }
@@ -137,7 +136,6 @@ export default {
       this.editor = new E(this.$refs.editorElem);
       this.editor.customConfig.onchange = html => {
         this.form.text = html;
-        // console.log(this.form.text);
       };
       this.editor.customConfig.uploadImgShowBase64 = true;
       this.editor.customConfig.zIndex = 100;
@@ -162,13 +160,10 @@ export default {
     // 图片上传成功回调
     successImg(res, file, fileList) {
       this.imgArr.push(res.data.url);
-      console.log(file);
-      console.log(fileList);
     },
     // 删除图片回调
     removeImg(file, fileList) {
       console.log(file, fileList);
-      // this.imgArr.push(res.data.url);
     },
     // 打开图片展示器
     viewBigImg(file) {
@@ -207,7 +202,6 @@ export default {
           if (res.status) {
             this.$message("上传成功!");
             this.form.name = "";
-            this.addNewArr = [];
             this.addNewPopup = false;
           } else {
             this.$message(res.msg);
@@ -223,16 +217,17 @@ export default {
       this.$axios.post("/add_img", {
         title: this.form.name,
         img_arr: this.imgArr,
-      });
-      then(res => {
+        type:['tupian']
+      })
+      .then(res => {
         if (res.status) {
           this.$message("上传成功!");
           this.form.name = "";
           this.addNewArr = [];
           this.imgArr = []; 
           this.addNewPopup = false;
-          console.log('我提交');
         } else {
+          console.log(res.msg);
           this.$message(res.msg);
         }
       }).catch(err => {

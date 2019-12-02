@@ -3,7 +3,7 @@
     <h3 class="title">{{item.title}}</h3>
     <p class="summary">
       {{item.summary}}...
-      <span>查看全部</span>
+      <span @click="hr_detail(item.id)">查看全部</span>
     </p>
     <p class="time">
       <i class="el-icon-pie-chart"></i>
@@ -18,16 +18,25 @@ export default {
   data() {
     return {};
   },
-  props:['item'],
+  props: ["item"],
   computed: {},
-  methods: {},
+  methods: {
+    hr_detail(id) {
+      this.$router.push({
+        path:'/detail',
+        query: {
+          id
+        }
+      });
+    }
+  },
   created() {}
 };
 </script>
 
 <style scoped lang="scss">
 .win {
-  color:#FFF;
+  color: #fff;
   border-bottom: 1px solid #fff;
   padding: 10px 0 5px;
   &:last-child {
@@ -49,6 +58,7 @@ export default {
     span {
       color: $yel;
       text-decoration: underline;
+      cursor: pointer;
     }
   }
   .time {
