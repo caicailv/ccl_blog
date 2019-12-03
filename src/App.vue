@@ -1,15 +1,11 @@
 <template>
   <div id="app">
-    <!-- 顶部背景 -->
+    <!-- 背景 -->
     <div class="_bj1">
       <div class="_top_girl"></div>
     </div>
     <div class="_con">
       <router-view />
-    </div>
-    <!-- 底部背景 -->
-    <div class="_bj2">
-      <div class="_top_girl _bot"></div>
     </div>
   </div>
 </template>
@@ -29,33 +25,25 @@ export default {
     top: 0;
     right: 0;
     width: 100%;
-    padding-top: 50px;
-  }
-  ._bj2 {
-    position: absolute;
-    left: 0;
-    right: 0;
-    width: 100%;
     bottom: 0;
-    padding-bottom: 50px;
-    z-index: -1;
+    // background-color: red;
+    height: 100vh;
+    // padding-top: 250px;
+    display: flex;
+    align-items: center;
   }
+
   ._top_girl {
     $w: 100%;
     overflow: hidden;
     position: relative;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 200px;
     background-image: url("./assets/img/bj.jpg");
-    top: 0;
     z-index: -1;
     background-position: 0 0;
     background-attachment: fixed;
     background-size: cover;
     width: $w;
-    height: 400px;
+    height: 800px;
     &._bot {
       background-position: 0 bottom;
     }
@@ -85,6 +73,8 @@ export default {
     width: 1250px;
     box-sizing: border-box;
     position: relative;
+  min-height: 100vh;
+
   }
 }
 </style>

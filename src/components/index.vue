@@ -1,5 +1,5 @@
 <template>
-  <div class="win">
+  <div class="wintt">
     <div class="_head">
       <Header />
     </div>
@@ -30,7 +30,10 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.win {
+.wintt {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
   .head {
     width: 100%;
   }
@@ -48,10 +51,10 @@ export default {
     .bod {
       border-radius: 10px;
       margin-right: 320px;
-      background-color: #6b6c70;
+      background-color: rgba($color: #000, $alpha: .5);
       padding: 1vh 10px;
       box-sizing: border-box;
-      height: 80vh;
+      height: 100%;
       .bod_bod {
         height: 100%;
         box-sizing: border-box;

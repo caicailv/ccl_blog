@@ -1,14 +1,17 @@
 <template>
-  <div class="win">
+  <div @click="hr_detail(item.id)" class="win">
     <h3 class="title">{{item.title}}</h3>
-    <p class="summary">
-      {{item.summary}}...
-      <span @click="hr_detail(item.id)">查看全部</span>
-    </p>
-    <p class="time">
-      <i class="el-icon-pie-chart"></i>
-      {{item.time}}
-    </p>
+    <div class="content" v-if="item.content" v-html="item.content"></div>
+    <div class="img_row" v-if="item.img_arr">
+      <img :src="ite" alt v-for="ite,ind in item.img_arr" :key="ind" />
+    </div>
+    <div class="fot">
+      <div class="tips">{{item.type}}</div>
+      <p class="time">
+        <i class="el-icon-pie-chart"></i>
+        {{item.date}}
+      </p>
+    </div>
   </div>
 </template>
 
@@ -23,7 +26,7 @@ export default {
   methods: {
     hr_detail(id) {
       this.$router.push({
-        path:'/detail',
+        path: "/detail",
         query: {
           id
         }
@@ -39,15 +42,12 @@ export default {
   color: #fff;
   border-bottom: 1px solid #fff;
   padding: 10px 0 5px;
-  &:last-child {
-    // border:none;
-  }
   .title {
     font-size: 22px;
     letter-spacing: 1px;
     padding-bottom: 5px;
   }
-  .summary {
+  .content {
     text-overflow: -o-ellipsis-lastline;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -55,15 +55,29 @@ export default {
     -webkit-line-clamp: 2;
     line-clamp: 2;
     -webkit-box-orient: vertical;
-    span {
-      color: $yel;
-      text-decoration: underline;
-      cursor: pointer;
+  }
+  .img_row {
+    display: flex;
+    align-items:center;
+    img {
+      margin-right: 10px;
+      height: 100px;
     }
   }
-  .time {
-    text-align: right;
+  .fot {
+    display: flex;
+    justify-content: space-between;
     padding-top: 5px;
+
+    .tips {
+      background-color: $theme;
+      border-radius: 3px;
+      line-height: 1;
+      padding: 2px;
+    }
+    .time {
+      text-align: right;
+    }
   }
 }
 </style>

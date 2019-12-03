@@ -1,6 +1,7 @@
 <template>
   <div class="win">
-   
+   <!-- 博客详情 -->
+    
   </div>
 </template>
 
@@ -9,7 +10,7 @@ export default {
   name: "Newlyadd",
   data() { 
     return {
-  
+      detial:{}
     };
   },
   computed: {},
@@ -17,7 +18,9 @@ export default {
   
   },
 
-  created() {}
+  created() {
+    console.log(this.$route.query.id);
+  }
 };
 </script>
 

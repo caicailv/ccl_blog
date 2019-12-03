@@ -12,13 +12,8 @@ axios.interceptors.request.use(config => {
     // 响应之前
     loadingInstance = Loading.service();
     config.headers['token'] = 23;
-    if(config.method === 'get'){
-        config.params = {
-            aaa:1
-        };
-    }
     return config
-}, error => { 
+}, error => {
     // 错误响应
     return Promise.reject(error)
 });
@@ -30,4 +25,4 @@ axios.interceptors.response.use(res => {
     console.log(err);
     Message.error('系统出错,请重试');
 })
-Vue.prototype.$axios = axios;
+Vue.prototype.$axios = axios; 

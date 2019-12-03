@@ -1,6 +1,7 @@
 @charset "UTF-8";
 body {
-    font-family: PingFangSC-Semibold, sans-serif;
+    /* font-family: PingFangSC-Semibold, sans-serif; */
+    font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
     font-size: 14px;
     background-color: #1c1c1c;
     color: #666;

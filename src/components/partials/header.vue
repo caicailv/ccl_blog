@@ -29,19 +29,16 @@
         <div class="title">
           <el-form>
             <div class="title_form_row">
-              <el-cascader
-                v-model="addNewType"
-                :options="addNewArr"
-                :props="{ expandTrigger: 'hover' }"
-                @change="cascaderChange"
-                placeholder="请选择类型"
-              ></el-cascader>
-              <el-input v-model="form.name" class="title_text" placeholder="请输入标题"></el-input>
+              <el-input v-model="title" class="title_text" placeholder="请输入标题"></el-input>
+              <div>
+                <el-radio v-model="addNewType" label="技术" border>技术</el-radio>
+                <el-radio v-model="addNewType" label="图片" border>图片</el-radio>
+              </div>
             </div>
           </el-form>
         </div>
-        <div v-show="addNewType[0]!='tupian'" class="editor_elem" ref="editorElem"></div>
-        <div v-if="addNewType[0]==='tupian'">
+        <div v-show="addNewType!=='图片'" class="editor_elem" ref="editorElem"></div>
+        <div v-if="addNewType==='图片'">
           <el-upload
             action="http://localhost:3001/file/uploading"
             list-type="picture-card"
@@ -73,10 +70,11 @@ export default {
     return {
       activeIndex: "/home",
       addNewPopup: false,
-      addNewType: [],
+      addNewType: "",
       dialogImageUrl: "",
       editor: null,
       dialogVisible: false,
+      checkList: [],
       imgArr: [], //上传的图片的路径的集合
       addNewArr: [
         {
@@ -98,17 +96,17 @@ export default {
           value: "suibi"
         }
       ],
-      form: {}
+      content: "",
+      title: ""
     };
   },
   computed: {},
   watch: {
+    // 切换时初始化容器
     addNewType() {
-      if (this.addNewType[0] === "tupian") {
-        this.imgArr = []; //初始化图片容器
-      } else {
-        this.initEditor();
-      }
+      this.imgArr = [];
+      this.content = "";
+      this.initEditor();
     }
   },
   methods: {
@@ -121,9 +119,6 @@ export default {
         }
       });
     },
-    cascaderChange(e) {
-      this.addNewType = e;
-    },
     addNew() {
       this.addNewPopup = true;
       setTimeout(() => {
@@ -135,7 +130,7 @@ export default {
       this.$refs.editorElem.innerHTML = "";
       this.editor = new E(this.$refs.editorElem);
       this.editor.customConfig.onchange = html => {
-        this.form.text = html;
+        this.content = html;
       };
       this.editor.customConfig.uploadImgShowBase64 = true;
       this.editor.customConfig.zIndex = 100;
@@ -172,36 +167,31 @@ export default {
     },
     // 保存
     saveAddNew() {
-      // 把类型，内容或者图片列表写入数据库，
-      if (this.addNewType.length === 0)
-        return this.$message("请选择新增内容的类型");
-      if (this.form.name === undefined || this.form.name === "") {
+      if (this.addNewType === "") return this.$message("请选择新增内容的类型");
+      if (this.title === undefined || this.title === "") {
         return this.$message("请输入标题");
       }
       // 图片
-      if (this.addNewType[0] === "tupian") {
-        if (this.imgArr.length == 0) return this.$message("请至少上传一张图片");
-        this.saveImg();
-      } else {
-        //技术
-        if (this.form.text === undefined || this.form.text === "")
-          return this.$message("请输入内容");
-        this.saveSkill();
-      }
-    },
-    // 添加技术博客
-    saveSkill() {
-      //分类 标题，编辑器
+      if (this.addNewType === "图片" && this.imgArr.length == 0)
+        return this.$message("请至少上传一张图片");
+      //技术
+      if (
+        this.addNewType === "技术" &&
+        (this.content === undefined || this.content === "")
+      )
+        return this.$message("请输入内容");
+
       this.$axios
-        .post("/add_skill", {
+        .post("/add_blog", {
           type: this.addNewType,
-          title: this.form.name,
-          content: this.form.text
+          title: this.title,
+          content: this.content,
+          img_arr: this.imgArr
         })
         .then(res => {
           if (res.status) {
             this.$message("上传成功!");
-            this.form.name = "";
+            this.title = "";
             this.addNewPopup = false;
           } else {
             this.$message(res.msg);
@@ -210,38 +200,13 @@ export default {
         .catch(err => {
           console.log(err);
         });
-    },
-    // 添加图片
-    saveImg() {
-      // 标题，路径集合
-      this.$axios.post("/add_img", {
-        title: this.form.name,
-        img_arr: this.imgArr,
-        type:['tupian']
-      })
-      .then(res => {
-        if (res.status) {
-          this.$message("上传成功!");
-          this.form.name = "";
-          this.addNewArr = [];
-          this.imgArr = []; 
-          this.addNewPopup = false;
-        } else {
-          console.log(res.msg);
-          this.$message(res.msg);
-        }
-      }).catch(err => {
-        console.log(err);
-      });
     }
-  },
-  mounted() {
-    this.$nextTick(() => {
-      this.initEditor();
-    });
   },
   created() {
     this.activeIndex = this.$route.path;
+    this.$nextTick(() => {
+      this.initEditor();
+    });
   }
 };
 </script>
@@ -268,11 +233,11 @@ export default {
     font-size: 12px;
   }
   .addnewbtn {
-    background-color: $yel;
-    border-color: $yel;
+    background-color: $theme;
+    border-color: $theme;
   }
   .wwin[data-v-d8e3fd6c] {
-    color: $yel;
+    color: $theme;
   }
   >>> .w-e-text-container p {
     color: #666;
@@ -284,9 +249,7 @@ export default {
       overflow-y: auto;
       .title {
         .title_form_row {
-          // display: flex;
-          // justify-content: space-between;
-          // align-items: center;
+          padding-bottom: 10px;
           .title_text {
             margin: 10px 0;
           }
