@@ -2,7 +2,7 @@
   <div class="win">
     <div class="container">
       <List v-for="item in blogList" :item="item" :key="item.id" />
-      <!-- <List v-for="item in blogList" :item="item" :key="item.id" /> -->
+      <no-data v-if="blogList.length===0"></no-data>
     </div>
   </div>
 </template>
@@ -21,7 +21,6 @@ export default {
     this.$axios
       .get("/query_blog")
       .then(res => {
-        console.log(res.data);
         this.blogList = res.data;
       })
       .catch(err => {
@@ -33,10 +32,7 @@ export default {
 
 <style scoped lang="scss">
 .win {
-  // .container {
-  //   height: 100%;
-  //   background-color: #fff;
-  // }
+
   .list {
     .img {
       overflow: hidden;

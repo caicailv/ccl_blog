@@ -1,55 +1,44 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import index from '@/components/index'
-import login from '@/components/login'
-import Home from '@/components/nav/home'
-import Notepad from '@/components/nav/notepad'
-import Album from '@/components/nav/album'
-import About from '@/components/nav/about'
-import Skill from '@/components/nav/skill'
-import detail from '@/components/detail'
 Vue.use(Router)
-/* 
-
-*/
 export default new Router({
   routes: [
     {
       path: '/',
       name: 'index',
-      component: index,
+      component: ()=> import("@/components/index"),
       redirect:'/home',
       children: [
         {
           path: 'home',
-          component: Home
+          component: ()=> import('@/components/nav/home'),
         },
         {
           path: 'skill', 
-          component: Skill
+          component: ()=> import('@/components/nav/skill'),
         },
         {
           path: 'notepad',
-          component: Notepad
+          component: ()=> import('@/components/nav/notepad'),
         },
         {
           path: 'album',
-          component: Album
+          component: ()=> import('@/components/nav/album'),
         },
         {
           path: 'about',
-          component: About
+          component: ()=> import('@/components/nav/about'),
         },
         {
           path: 'detail',
-          component: detail
+          component: ()=> import('@/components/detail'),
         },
       ]
     },
     {
       path: '/login',
       name: 'login',
-      component: login
+      component: ()=> import("@/components/login")
     }
   ]
 })

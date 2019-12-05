@@ -5,13 +5,13 @@
     </div>
     <div class="_body">
       <div class="bod">
-        <router-view class="bod_bod"></router-view>
+        <router-view class="bod_bod scroll_style"></router-view>
       </div>
       <div class="right">
         <Right />
       </div>
     </div>
-    <div class="_head">
+    <div class="_footer">
       <Footer />
     </div>
   </div>
@@ -31,16 +31,18 @@ export default {
 
 <style scoped lang="scss">
 .wintt {
-  min-height: 100vh;
+ height: 100vh;
   display: flex;
   flex-direction: column;
-  .head {
+  ._head {
     width: 100%;
   }
   ._body {
     margin-top: 10px;
     margin-bottom: 20px;
     position: relative;
+    flex: 1;
+    overflow: auto;
     .right {
       position: absolute;
       width: 300px;
@@ -55,31 +57,10 @@ export default {
       padding: 1vh 10px;
       box-sizing: border-box;
       height: 100%;
-      .bod_bod {
-        height: 100%;
-        box-sizing: border-box;
-        overflow: auto;
-        &::-webkit-scrollbar {
-          /*滚动条整体样式*/
-          width: 4px; /*高宽分别对应横竖滚动条的尺寸*/
-          height: 4px;
-          scrollbar-arrow-color: red;
-        }
-        &::-webkit-scrollbar-thumb {
-          /*滚动条里面小方块*/
-          border-radius: 5px;
-          -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
-          background: rgba(0, 0, 0, 0.2);
-          scrollbar-arrow-color: red;
-        }
-        &::-webkit-scrollbar-track {
-          /*滚动条里面轨道*/
-          -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
-          border-radius: 0;
-          background: rgba(0, 0, 0, 0.1);
-        }
-      }
     }
   }
+  // ._footer{
+
+  // }
 }
 </style>

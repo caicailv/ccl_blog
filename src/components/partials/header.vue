@@ -15,100 +15,21 @@
       <el-menu-item index="/album">相册</el-menu-item>
       <el-menu-item index="/about">关于我</el-menu-item>
     </el-menu>
-    <el-button type="primary" class="addnewbtn" @click="addNew" icon="el-icon-plus">新增内容</el-button>
-
-    <!-- 新增内容/随笔弹窗 -->
-    <el-dialog
-      :visible.sync="addNewPopup"
-      width="70%"
-      :before-close="()=>{addNewPopup=false}"
-      :close-on-click-modal="false"
-      class="add_new_pop"
-    >
-      <div class="row">
-        <div class="title">
-          <el-form>
-            <div class="title_form_row">
-              <el-input v-model="title" class="title_text" placeholder="请输入标题"></el-input>
-              <div>
-                <el-radio v-model="addNewType" label="技术" border>技术</el-radio>
-                <el-radio v-model="addNewType" label="图片" border>图片</el-radio>
-              </div>
-            </div>
-          </el-form>
-        </div>
-        <div v-show="addNewType!=='图片'" class="editor_elem" ref="editorElem"></div>
-        <div v-if="addNewType==='图片'">
-          <el-upload
-            action="http://localhost:3001/file/uploading"
-            list-type="picture-card"
-            :on-preview="viewBigImg"
-            :on-remove="removeImg"
-            :on-success="successImg"
-          >
-            <i class="el-icon-plus"></i>
-          </el-upload>
-        </div>
-      </div>
-
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="addNewPopup = false">取 消</el-button>
-        <el-button type="primary" @click="saveAddNew">保 存</el-button>
-      </span>
-    </el-dialog>
-    <el-dialog :visible.sync="dialogVisible">
-      <img width="80%" :src="dialogImageUrl" alt />
-    </el-dialog>
+    <el-button type="primary" class="addnewbtn" @click="addNewPop" icon="el-icon-plus">新增内容</el-button>
+    <add-blog class="add_blog" ref="add_blog"></add-blog>
   </div>
 </template>
 
 <script>
-import E from "wangeditor";
 export default {
   name: "Header",
   data() {
     return {
-      activeIndex: "/home",
-      addNewPopup: false,
-      addNewType: "",
-      dialogImageUrl: "",
-      editor: null,
-      dialogVisible: false,
-      checkList: [],
-      imgArr: [], //上传的图片的路径的集合
-      addNewArr: [
-        {
-          label: "技术",
-          value: "jishu",
-          children: [
-            {
-              label: "CSS",
-              value: "css"
-            }
-          ]
-        },
-        {
-          label: "图片",
-          value: "tupian"
-        },
-        {
-          label: "随笔",
-          value: "suibi"
-        }
-      ],
-      content: "",
-      title: ""
+      activeIndex: "/home"
     };
   },
   computed: {},
-  watch: {
-    // 切换时初始化容器
-    addNewType() {
-      this.imgArr = [];
-      this.content = "";
-      this.initEditor();
-    }
-  },
+
   methods: {
     navTabSelect(key, keyPath) {
       if (keyPath[0] == this.$route.path) return;
@@ -119,94 +40,13 @@ export default {
         }
       });
     },
-    addNew() {
-      this.addNewPopup = true;
-      setTimeout(() => {
-        this.initEditor();
-      }, 1);
-    },
-    initEditor() {
-      if (this.addNewPopup === false) return;
-      this.$refs.editorElem.innerHTML = "";
-      this.editor = new E(this.$refs.editorElem);
-      this.editor.customConfig.onchange = html => {
-        this.content = html;
-      };
-      this.editor.customConfig.uploadImgShowBase64 = true;
-      this.editor.customConfig.zIndex = 100;
-      this.editor.customConfig.menus = [
-        "bold",
-        "fontSize",
-        "fontName",
-        "italic",
-        "underline",
-        "foreColor",
-        "backColor",
-        "link",
-        "list",
-        "justify",
-        "quote",
-        "image",
-        "table",
-        "code"
-      ];
-      this.editor.create();
-    },
-    // 图片上传成功回调
-    successImg(res, file, fileList) {
-      this.imgArr.push(res.data.url);
-    },
-    // 删除图片回调
-    removeImg(file, fileList) {
-      console.log(file, fileList);
-    },
-    // 打开图片展示器
-    viewBigImg(file) {
-      this.dialogImageUrl = file.url;
-      this.dialogVisible = true;
-    },
-    // 保存
-    saveAddNew() {
-      if (this.addNewType === "") return this.$message("请选择新增内容的类型");
-      if (this.title === undefined || this.title === "") {
-        return this.$message("请输入标题");
-      }
-      // 图片
-      if (this.addNewType === "图片" && this.imgArr.length == 0)
-        return this.$message("请至少上传一张图片");
-      //技术
-      if (
-        this.addNewType === "技术" &&
-        (this.content === undefined || this.content === "")
-      )
-        return this.$message("请输入内容");
-
-      this.$axios
-        .post("/add_blog", {
-          type: this.addNewType,
-          title: this.title,
-          content: this.content,
-          img_arr: this.imgArr
-        })
-        .then(res => {
-          if (res.status) {
-            this.$message("上传成功!");
-            this.title = "";
-            this.addNewPopup = false;
-          } else {
-            this.$message(res.msg);
-          }
-        })
-        .catch(err => {
-          console.log(err);
-        });
+    // 开启弹窗, 用ref拿到子组件实例,操作子组件实例中的方法
+    addNewPop() {
+      this.$refs.add_blog.addNew();
     }
   },
   created() {
     this.activeIndex = this.$route.path;
-    this.$nextTick(() => {
-      this.initEditor();
-    });
   }
 };
 </script>
@@ -220,6 +60,9 @@ export default {
   justify-content: space-between;
   align-items: center;
   background-color: $black;
+  .add_blog {
+    position: absolute;
+  }
   .el-menu.el-menu--horizontal {
     border: none;
   }

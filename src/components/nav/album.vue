@@ -2,17 +2,14 @@
   <div class="win">
     <div class="list" v-for="item in blogList">
       <p class="time">{{item.date}}</p>
-      <p class="title">
-        {{item.title}}
-      </p>
+      <p class="title">{{item.title}}</p>
       <div class="img_row">
         <div v-for="ite,inde in item.img_arr" class="img_list">
           <el-image fit="contain" class="imgrow" :src="ite" :preview-src-list="item.img_arr"></el-image>
-          <!-- <p class="title">{{ite.title}}</p>
-          <div class="zy"></div>-->
         </div>
       </div>
     </div>
+    <no-data v-if="blogList.length===0"></no-data>
   </div>
 </template>
 
@@ -37,22 +34,12 @@ export default {
   methods: {},
   created() {
     this.$axios
-      .get("/v1/album")
-      .then(res => {
-        this.imgList = res;
-      })
-      .catch(err => {
-        console.log(err);
-      });
-
-    this.$axios
       .get("/query_blog", {
         params: {
           type: "图片"
         }
       })
       .then(res => {
-        // console.log(res.data);
         this.blogList = res.data;
       })
       .catch(err => {
@@ -70,15 +57,15 @@ export default {
     overflow: hidden;
     padding-left: 5px;
     border-bottom: 1px solid $theme;
-    .time{
+    .time {
       font-size: 24px;
       font-weight: bold;
     }
-    .title{
+    .title {
       font-size: 20px;
       padding: 10px 0;
     }
-    .img_row{
+    .img_row {
       margin-left: 20px;
     }
     .img_list {
@@ -96,17 +83,17 @@ export default {
         width: auto;
         height: 100%;
       }
-      .zy {
-        pointer-events: none;
-        background-color: rgba(0, 0, 0, 0.2);
-        position: absolute;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        top: 0;
-        transition: 0.3s;
-        opacity: 0;
-      }
+      // .zy {
+      //   pointer-events: none;
+      //   background-color: rgba(0, 0, 0, 0.2);
+      //   position: absolute;
+      //   left: 0;
+      //   right: 0;
+      //   bottom: 0;
+      //   top: 0;
+      //   transition: 0.3s;
+      //   opacity: 0;
+      // }
       &:hover {
         .title {
           opacity: 1;

@@ -1,5 +1,5 @@
 <template>
-  <div @click="hr_detail(item.id)" class="win">
+  <div @click="hr_detail(item._id)" class="win">
     <h3 class="title">{{item.title}}</h3>
     <div class="content" v-if="item.content" v-html="item.content"></div>
     <div class="img_row" v-if="item.img_arr">
@@ -24,11 +24,17 @@ export default {
   props: ["item"],
   computed: {},
   methods: {
-    hr_detail(id) {
+    ellipisContent(text) {
+      console.log(text);
+      if (text.length <= 50) return text;
+      return text.substr(0, 50) + "...";
+    },
+
+    hr_detail(_id) {
       this.$router.push({
         path: "/detail",
         query: {
-          id
+          _id
         }
       });
     }
@@ -48,7 +54,6 @@ export default {
     padding-bottom: 5px;
   }
   .content {
-    text-overflow: -o-ellipsis-lastline;
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
@@ -58,7 +63,7 @@ export default {
   }
   .img_row {
     display: flex;
-    align-items:center;
+    align-items: center;
     img {
       margin-right: 10px;
       height: 100px;
