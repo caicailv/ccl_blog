@@ -55,10 +55,11 @@ export default {
 .win {
   width: 100%;
   margin-bottom: 0px;
-  background-color: #fff;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 0 20px;
+  box-sizing: border-box;
   background-color: $black;
   .add_blog {
     position: absolute;

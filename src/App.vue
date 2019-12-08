@@ -19,6 +19,9 @@ export default {
 <style lang='scss' scoped>
 #app {
   position: relative;
+  height: 100vh;
+  overflow: hidden;
+
   ._bj1 {
     position: absolute;
     left: 0;
@@ -70,10 +73,9 @@ export default {
   }
   ._con {
     margin: 0 auto;
-    width: 1250px;
     box-sizing: border-box;
     position: relative;
-  min-height: 100vh;
+    min-height: 100vh;
 
   }
 }

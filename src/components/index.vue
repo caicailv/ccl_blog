@@ -36,10 +36,13 @@ export default {
   flex-direction: column;
   ._head {
     width: 100%;
+    box-sizing: border-box;
   }
   ._body {
+    width: 1250px;
     margin-top: 10px;
     margin-bottom: 20px;
+    margin: 10px auto 20px;
     position: relative;
     flex: 1;
     overflow: auto;
