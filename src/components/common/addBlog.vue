@@ -42,6 +42,8 @@
     <el-dialog :visible.sync="dialogVisible">
       <img width="80%" :src="dialogImageUrl" alt />
     </el-dialog>
+    <login></login>
+
   </div>
 </template>
 
@@ -116,7 +118,6 @@ export default {
       ];
       this.editor.create();
       this.editor.txt.html(text);
-      console.log(123);
     },
     // 图片上传成功回调
     successImg(res, file, fileList) {
