@@ -34,6 +34,9 @@ export default {
       })
       .then(res=>{
         console.log(res);
+        if(res.status){
+          
+        }
       })
       .catch(err=>{
         console.log(err);
@@ -41,11 +44,14 @@ export default {
     }
   },
   created() {
-    // console.log(2312312312);
+      // 自动聚焦
     this.$nextTick(function(){
-      
-      console.log(this.$refs.passwordInt.$refs.input.focus());
+      this.$refs.passwordInt.$refs.input.focus();
+
     })
+  },
+  mounted(){
+
   }
 };
 </script>
