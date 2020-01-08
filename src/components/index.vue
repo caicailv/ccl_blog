@@ -18,6 +18,7 @@
 </template>
 
 <script>
+
 export default {
   name: "index",
   data() {
@@ -25,7 +26,8 @@ export default {
   },
   computed: {},
   methods: {},
-  created() {}
+  created() {
+  }
 };
 </script>
 

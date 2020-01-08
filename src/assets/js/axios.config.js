@@ -10,8 +10,9 @@ axios.defaults.timeout = 5000;
 axios.defaults.baseURL = publicUrl;
 axios.interceptors.request.use(config => {
     // 响应之前
+    let token = localStorage.getItem("token"); 
     loadingInstance = Loading.service();
-    config.headers['token'] = 23;
+    config.headers['token'] = token;
     return config
 }, error => {
     // 错误响应

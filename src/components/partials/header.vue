@@ -1,21 +1,26 @@
 <template>
   <div class="win">
-    <el-menu
-      :default-active="activeIndex"
-      class="el-menu-demo"
-      mode="horizontal"
-      @select="navTabSelect"
-      background-color="#1c1c1c"
-      text-color="#fff"
-      active-text-color="#ffd04b"
-    >
-      <el-menu-item index="/home">首页</el-menu-item>
-      <el-menu-item index="/skill">技术</el-menu-item>
-      <el-menu-item index="/notepad">随笔</el-menu-item>
-      <el-menu-item index="/album">相册</el-menu-item>
-      <el-menu-item index="/about">关于我</el-menu-item>
-    </el-menu>
-    <el-button type="primary" class="addnewbtn" @click="addNewPop" icon="el-icon-plus">新增内容</el-button>
+    <div class="rott">
+      <div class="left">
+        <el-menu
+          :default-active="activeIndex"
+          class="el-menu-demo"
+          mode="horizontal"
+          @select="navTabSelect"
+          background-color="#1c1c1c"
+          text-color="#fff"
+          active-text-color="#ffd04b"
+        >
+          <el-menu-item index="/home">首页</el-menu-item>
+          <el-menu-item index="/skill">技术</el-menu-item>
+          <el-menu-item index="/notepad">随笔</el-menu-item>
+          <el-menu-item index="/album">相册</el-menu-item>
+          <el-menu-item index="/about">关于我</el-menu-item>
+        </el-menu>
+      </div>
+      <el-button type="primary" class="addnewbtn" @click="addNewPop" icon="el-icon-plus">新增内容</el-button>
+    </div>
+    <login ref="login" @adopt></login>
     <add-blog class="add_blog" ref="add_blog"></add-blog>
   </div>
 </template>
@@ -25,11 +30,11 @@ export default {
   name: "Header",
   data() {
     return {
-      activeIndex: "/home"
+      activeIndex: "/home",
+      loginStatus: false //登录状态 true 登录中 false未登录
     };
   },
   computed: {},
-
   methods: {
     navTabSelect(key, keyPath) {
       if (keyPath[0] == this.$route.path) return;
@@ -53,14 +58,17 @@ export default {
 
 <style scoped lang="scss">
 .win {
-  width: 100%;
   margin-bottom: 0px;
-  display: flex;
-  justify-content: space-between;
   align-items: center;
   padding: 0 20px;
   box-sizing: border-box;
   background-color: $black;
+  -webkit-user-select: none;
+  .rott {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
   .add_blog {
     position: absolute;
   }

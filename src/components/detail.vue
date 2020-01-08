@@ -27,26 +27,27 @@ export default {
   name: "Newlyadd",
   data() {
     return {
-      detail: {}
+      detail: {},
+      _id:''
     };
   },
-  computed: {},
+  computed: {}, 
   methods: {
     emit() {
-      this.$refs.add_blog.addNew();
+      this.$refs.add_blog.addNew(this._id);
       this.$refs.add_blog.isEmit=true;//标题
       this.$refs.add_blog.title=this.detail.title;//标题
       this.$refs.add_blog.addNewType=this.detail.type;//类型
       this.$refs.add_blog.content=this.detail.content;//内容
     },
-  
   },
 
   created() {
+    this._id = this.$route.query._id;
     this.$axios
       .get("/query_blogdetail", {
         params: {
-          _id: this.$route.query.id
+          _id: this._id
         }
       })
       .then(res => {

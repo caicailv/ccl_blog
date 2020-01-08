@@ -9,56 +9,67 @@
       :close-on-press-escape="false"
       class="add_new_pop"
     >
-    <div class="row">
-      <el-input placeholder="请输入秘钥" ref="passwordInt" type="password" prefix-icon="el-icon-key" @keyup.enter.native="submit" v-model="password"></el-input>
-
-    </div>
+      <div class="row">
+        <el-input
+          placeholder="请输入秘钥"
+          ref="passwordInt"
+          type="password"
+          prefix-icon="el-icon-key"
+          @keyup.enter.native="submit"
+          v-model="password"
+        ></el-input>
+      </div>
     </el-dialog>
   </div>
 </template>
 
 <script>
 export default {
-  name: "aa",
+  name: "login",
   data() {
     return {
-      show: true,
-      password:'',
+      show: false,
+      password: ""
     };
   },
   computed: {},
   methods: {
-    submit(){
-      this.$axios.post('/password',{
-        password:this.password,
-      })
-      .then(res=>{
-        console.log(res);
-        if(res.status){
-          
-        }
-      })
-      .catch(err=>{
-        console.log(err);
-      })
+    openPopup() {
+      this.show = true;
+      this.$$nextTick(() => {
+        // 自动聚焦
+        this.$refs.passwordInt.$refs.input.focus();
+      });
+    },
+    submit() {
+      this.$axios
+        .post("/password", {
+          password: this.password
+        })
+        .then(res => {
+          if (res.status) {
+            let token = res.data;
+            localStorage.setItem("token", token);
+            this.$message("验证通过!");
+            this.show = false;
+            this.$emit("adopt");
+          }else{
+            this.$message(res.msg)
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
     }
   },
-  created() {
-      // 自动聚焦
-    this.$nextTick(function(){
-      this.$refs.passwordInt.$refs.input.focus();
-
-    })
-  },
-  mounted(){
-
-  }
+  created() {},
+  mounted() {}
 };
 </script>
 
 <style scoped lang="scss">
 .win {
-  .row{
+  .row {
     // width: 50%;
     margin: 0 auto;
   }

@@ -42,8 +42,7 @@
     <el-dialog :visible.sync="dialogVisible">
       <img width="80%" :src="dialogImageUrl" alt />
     </el-dialog>
-    <login></login>
-
+    <login ref="login" @adopt="addNew"></login>
   </div>
 </template>
 
@@ -51,7 +50,7 @@
 import E from "wangeditor";
 
 export default {
-  name: "aa",
+  name: "addBlog",
   data() {
     return {
       addNewPopup: false,
@@ -62,7 +61,8 @@ export default {
       imgArr: [], //上传的图片的路径的集合
       content: "", // 上传的内容
       title: "", //上传的标题
-      isEmit: false //标识编辑还是增加, false 增加 true 编辑
+      isEmit: false, //标识编辑还是增加, false 增加 true 编辑
+      _id: "" //编辑时,本条内容的_id  00  .
     };
   },
   computed: {},
@@ -85,14 +85,25 @@ export default {
   },
   methods: {
     // 开启弹窗
-    addNew() {
+    addNew(_id) {
+      // 判断登录状态
+      let token = localStorage.getItem("token");
+      if (!token) {
+        return this.$refs.login.openPopup();
+      }
+      // 编辑
+      if (_id) {
+        console.log(_id);
+        this.isEmit = true;
+      }
       this.addNewPopup = true;
       setTimeout(() => {
         this.initEditor();
       }, 1);
     },
+    initAddNew() {},
     // 初始化富文本编辑器
-    initEditor(text = "") { 
+    initEditor(text = "") {
       if (this.addNewPopup === false) return;
       this.editor = new E(this.$refs.editorElem);
       this.editor.customConfig.onchange = html => {
@@ -147,17 +158,21 @@ export default {
         (this.content === undefined || this.content === "")
       )
         return this.$message("请输入内容");
-
+        console.log(this.isEmit);
+        let url = this.isEmit? '/emit_blog':"/add_blog";
+        console.log(url);
       this.$axios
-        .post("/add_blog", {
+        .post(url, {
           type: this.addNewType,
           title: this.title,
           content: this.content,
-          img_arr: this.imgArr
+          img_arr: this.imgArr,
+          _id: this._id || ""
         })
         .then(res => {
           if (res.status) {
-            this.$message("上传成功!");
+
+            this.$message(this.isEmit?"修改成功":"上传成功");
             this.title = "";
             this.addNewPopup = false;
           } else {
