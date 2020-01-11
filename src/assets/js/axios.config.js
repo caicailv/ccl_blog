@@ -5,7 +5,7 @@ import { Loading, Message } from 'element-ui';
 import axios from 'axios';
 let isPattern = process.env.NODE_ENV;
 let loadingInstance = null;
-let publicUrl = isPattern == 'development' ? 'http://localhost:3001/' : 'http://www.caicailv.cn/';
+let publicUrl = isPattern == 'development' ? 'http://localhost:3001/' : 'http://www.caicailv.cn:3001/';
 axios.defaults.timeout = 5000;
 axios.defaults.baseURL = publicUrl;
 axios.interceptors.request.use(config => {

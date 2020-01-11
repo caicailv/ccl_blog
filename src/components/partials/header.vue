@@ -11,11 +11,11 @@
           text-color="#fff"
           active-text-color="#ffd04b"
         >
-          <el-menu-item index="/home">首页</el-menu-item>
+          <el-menu-item index="/about">关于我</el-menu-item>
+          <!-- <el-menu-item index="/home">首页</el-menu-item> -->
           <el-menu-item index="/skill">技术</el-menu-item>
           <el-menu-item index="/notepad">随笔</el-menu-item>
           <el-menu-item index="/album">相册</el-menu-item>
-          <el-menu-item index="/about">关于我</el-menu-item>
         </el-menu>
       </div>
       <el-button type="primary" class="addnewbtn" @click="addNewPop" icon="el-icon-plus">新增内容</el-button>
@@ -30,7 +30,7 @@ export default {
   name: "Header",
   data() {
     return {
-      activeIndex: "/home",
+      activeIndex: "/about",
       loginStatus: false //登录状态 true 登录中 false未登录
     };
   },
