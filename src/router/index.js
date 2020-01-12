@@ -6,39 +6,42 @@ export default new Router({
     {
       path: '/',
       name: 'index',
-      component: ()=> import("@/components/index"),
-      redirect:'/about',
+      meta: {
+        title: '菜菜驴个人博客',
+      },
+      component: () => import("@/components/index"),
+      redirect: '/about',
       children: [
         {
           path: 'home',
-          component: ()=> import('@/components/nav/home'),
+          component: () => import('@/components/nav/home'),
         },
         {
-          path: 'skill', 
-          component: ()=> import('@/components/nav/skill'),
+          path: 'skill',
+          component: () => import('@/components/nav/skill'),
         },
         {
           path: 'notepad',
-          component: ()=> import('@/components/nav/notepad'),
+          component: () => import('@/components/nav/notepad'),
         },
         {
           path: 'album',
-          component: ()=> import('@/components/nav/album'),
+          component: () => import('@/components/nav/album'),
         },
         {
           path: 'about',
-          component: ()=> import('@/components/nav/about'),
+          component: () => import('@/components/nav/about'),
         },
         {
           path: 'detail',
-          component: ()=> import('@/components/detail'),
+          component: () => import('@/components/detail'),
         },
       ]
     },
     {
       path: '/login',
       name: 'login',
-      component: ()=> import("@/components/login")
+      component: () => import("@/components/login")
     }
   ]
 })

@@ -50,7 +50,7 @@ export default {
           _id: this._id
         }
       })
-      .then(res => {
+      .then(res  => {
         if (res.status) {
           this.detail = res.data;
         } else {
