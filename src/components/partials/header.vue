@@ -1,26 +1,27 @@
 <template>
   <div class="win">
-    <div class="rott">
-      <div class="left">
-        <el-menu
-          :default-active="activeIndex"
-          class="el-menu-demo"
-          mode="horizontal"
-          @select="navTabSelect"
-          background-color="#1c1c1c"
-          text-color="#fff"
-          active-text-color="#ffd04b"
-        >
-          <el-menu-item index="/about">关于我</el-menu-item>
-          <!-- <el-menu-item index="/home">首页</el-menu-item> -->
-          <el-menu-item index="/skill">技术</el-menu-item>
-          <el-menu-item index="/notepad">随笔</el-menu-item>
-          <el-menu-item index="/album">相册</el-menu-item>
-        </el-menu>
+    <div class="win_container">
+      <div class="rott">
+        <div class="left">
+          <el-menu
+            :default-active="activeIndex"
+            class="el-menu-demo"
+            mode="horizontal"
+            @select="navTabSelect"
+            background-color="#1c1c1c"
+            text-color="#fff"
+            active-text-color="#ffd04b"
+          >
+            <el-menu-item index="/about">关于我</el-menu-item>
+            <!-- <el-menu-item index="/home">首页</el-menu-item> -->
+            <el-menu-item index="/skill">技术</el-menu-item>
+            <el-menu-item index="/notepad">随笔</el-menu-item>
+            <el-menu-item index="/album">相册</el-menu-item>
+          </el-menu>
+        </div>
+        <el-button type="primary" class="addnewbtn" @click="addNewPop" icon="el-icon-plus">新增内容</el-button>
       </div>
-      <el-button type="primary" class="addnewbtn" @click="addNewPop" icon="el-icon-plus">新增内容</el-button>
     </div>
-    <login ref="login" @adopt></login>
     <add-blog class="add_blog" ref="add_blog"></add-blog>
   </div>
 </template>
@@ -31,7 +32,6 @@ export default {
   data() {
     return {
       activeIndex: "/about",
-      loginStatus: false //登录状态 true 登录中 false未登录
     };
   },
   computed: {},
@@ -64,6 +64,11 @@ export default {
   box-sizing: border-box;
   background-color: $black;
   -webkit-user-select: none;
+
+  .win_container {
+    width: 1250px;
+    margin: 0 auto;
+  }
   .rott {
     display: flex;
     justify-content: space-between;

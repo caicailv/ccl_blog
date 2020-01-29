@@ -6,11 +6,13 @@ import axios from 'axios';
 let isPattern = process.env.NODE_ENV;
 let loadingInstance = null;
 let publicUrl = isPattern == 'development' ? 'http://localhost:3001/' : 'http://www.caicailv.cn:3001/';
+//  let publicUrl = isPattern = 'http://www.caicailv.cn:3001/'; 
 axios.defaults.timeout = 5000;
 axios.defaults.baseURL = publicUrl;
+console.log(publicUrl)
 axios.interceptors.request.use(config => {
     // 响应之前
-    let token = localStorage.getItem("token"); 
+    let token = localStorage.getItem("token");
     loadingInstance = Loading.service();
     config.headers['token'] = token;
     return config
@@ -27,3 +29,4 @@ axios.interceptors.response.use(res => {
     Message.error('系统出错,请重试');
 })
 Vue.prototype.$axios = axios; 
+Vue.prototype.$url = publicUrl;

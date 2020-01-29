@@ -23,7 +23,7 @@
         <div v-show="addNewType!=='图片'" class="editor_elem" ref="editorElem"></div>
         <div v-if="addNewType==='图片'">
           <el-upload
-            action="http://localhost:3001/file/uploading"
+            :action="imgUpdateUrl"
             list-type="picture-card"
             :on-preview="viewBigImg"
             :on-remove="removeImg"
@@ -54,7 +54,7 @@ export default {
   data() {
     return {
       addNewPopup: false,
-      addNewType: "", //新增内容类型
+      addNewType: '技术', //新增内容类型
       dialogImageUrl: "", // 图片展示器,路径容器
       editor: null, //存储富文本编辑器元素
       dialogVisible: false, // 图片展示器显示隐藏
@@ -62,25 +62,28 @@ export default {
       content: "", // 上传的内容
       title: "", //上传的标题
       isEmit: false, //标识编辑还是增加, false 增加 true 编辑
-      _id: "" //编辑时,本条内容的_id  00  .
+      _id: "", //编辑时,本条内容的_id  00  .
+      // 图片上传路径
+      // action="http://localhost:3001/file/uploading"
+      imgUpdateUrl: this.$url+"file/uploading"
     };
   },
   computed: {},
   watch: {
     // 切换时初始化容器
     addNewType() {
-      this.imgArr = [];
+      // this.imgArr = [];
 
-      if (this.isEmit) {
-        // 编辑,初始化isemit
-        this.isEmit = false;
-      } else {
-        // 增加,初始化富文本
-        this.content = "";
-      }
-      this.$nextTick(() => {
-        this.initEditor(this.content);
-      });
+      // if (this.isEmit) {
+      //   // 编辑,初始化isemit
+      //   this.isEmit = false;
+      // } else {
+      //   // 增加,初始化富文本
+      //   this.content = "";
+      // }
+      // this.$nextTick(() => {
+      //   this.initEditor(this.content);
+      // });
     }
   },
   methods: {
@@ -88,9 +91,10 @@ export default {
     addNew(_id) {
       // 判断登录状态
       let token = localStorage.getItem("token");
-      if (!token) {
-        return this.$refs.login.openPopup();
-      }
+      // 暂时取消登录相关功能
+      // if (!token) {
+      //   return this.$refs.login.openPopup();
+      // }
       // 编辑
       if (_id) {
         console.log(_id);
@@ -158,9 +162,7 @@ export default {
         (this.content === undefined || this.content === "")
       )
         return this.$message("请输入内容");
-        console.log(this.isEmit);
-        let url = this.isEmit? '/emit_blog':"/add_blog";
-        console.log(url);
+      let url = this.isEmit ? "/emit_blog" : "/add_blog";
       this.$axios
         .post(url, {
           type: this.addNewType,
@@ -171,10 +173,10 @@ export default {
         })
         .then(res => {
           if (res.status) {
-
-            this.$message(this.isEmit?"修改成功":"上传成功");
+            this.$message(this.isEmit ? "修改成功" : "上传成功");
             this.title = "";
             this.addNewPopup = false;
+            location.reload()
           } else {
             this.$message(res.msg);
           }
