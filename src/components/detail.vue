@@ -1,7 +1,6 @@
 <template>
   <div class="win">
     <add-blog class="add_blog" ref="add_blog"></add-blog>
-
     <!-- 博客详情 -->
     <h3 class="title">{{detail.title}}</h3>
     <el-row class="btn_row">
@@ -17,7 +16,6 @@
     </div>
     <div class="content scroll_style">
       <div class="bod" v-html="detail.content"></div>
-      <div class="bod" v-html="detail.content"></div>
     </div>
   </div>
 </template>
@@ -28,18 +26,19 @@ export default {
   data() {
     return {
       detail: {},
-      _id:''
+      _id: ""
     };
   },
-  computed: {}, 
+  computed: {},
   methods: {
     emit() {
       this.$refs.add_blog.addNew(this._id);
-      this.$refs.add_blog.isEmit=true;//标题
-      this.$refs.add_blog.title=this.detail.title;//标题
-      this.$refs.add_blog.addNewType=this.detail.type;//类型
-      this.$refs.add_blog.content=this.detail.content;//内容
+      this.$refs.add_blog.isEmit = true; //标题
+      this.$refs.add_blog.title = this.detail.title; //标题
+      this.$refs.add_blog.addNewType = this.detail.type; //类型
+      this.$refs.add_blog.content = this.detail.content; //内容
     },
+    deleteBlog() {}
   },
 
   created() {
@@ -50,7 +49,7 @@ export default {
           _id: this._id
         }
       })
-      .then(res  => {
+      .then(res => {
         if (res.status) {
           this.detail = res.data;
         } else {
@@ -94,6 +93,13 @@ export default {
     border-radius: 5px;
     flex: 1;
     overflow: auto;
+
+    position: relative;
+    .copy {
+      position: absolute;
+      right: 10px;
+      top: 5px;
+    }
   }
 }
 </style>

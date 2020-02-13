@@ -9,7 +9,6 @@ let publicUrl = isPattern == 'development' ? 'http://localhost:3001/' : 'http://
 //  let publicUrl = isPattern = 'http://www.caicailv.cn:3001/'; 
 axios.defaults.timeout = 5000;
 axios.defaults.baseURL = publicUrl;
-console.log(publicUrl)
 axios.interceptors.request.use(config => {
     // 响应之前
     let token = localStorage.getItem("token");
