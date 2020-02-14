@@ -4,12 +4,10 @@
     <!-- 博客详情 -->
     <h3 class="title">{{detail.title}}</h3>
     <el-row class="btn_row">
-      <el-tooltip class="item" effect="dark" content="编辑" placement="bottom-end">
-        <el-button type="primary" @click="emit" icon="el-icon-edit" circle></el-button>
-      </el-tooltip>
-      <el-tooltip class="item" effect="dark" content="删除" placement="bottom-end">
-        <el-button type="danger" icon="el-icon-delete" circle></el-button>
-      </el-tooltip>
+      <el-button type="primary" @click="emit" icon="el-icon-edit" circle></el-button>
+      <el-popconfirm title="确定删除该博客吗?" @onConfirm="deleteBlog">
+        <el-button type="danger" icon="el-icon-delete" @click="" slot="reference" circle></el-button>
+      </el-popconfirm>
     </el-row>
     <div class="tips_row">
       <div class="tips">{{detail.type}}</div>
@@ -38,7 +36,24 @@ export default {
       this.$refs.add_blog.addNewType = this.detail.type; //类型
       this.$refs.add_blog.content = this.detail.content; //内容
     },
-    deleteBlog() {}
+    deleteBlog() {
+      this.$axios.post("/delete_blog",{
+        _id:this._id
+      })
+      .then(res=>{
+        if(res.status){
+          this.$message(res.msg)
+        }else{
+          console.log(res.msg);
+        }
+        setTimeout(() => {
+          this.$router.back(-1);
+        }, 500);
+      })
+      .catch(err=>{
+        console.log(err);
+      })
+    }
   },
 
   created() {
@@ -54,10 +69,13 @@ export default {
           this.detail = res.data;
         } else {
           this.$message(res.msg);
+          setTimeout(()=>{
+            this.$router.back(-1);
+          },500)
         }
       })
       .catch(err => {
-        console.log(err);
+        console.log('12312312'+err);
       });
   }
 };

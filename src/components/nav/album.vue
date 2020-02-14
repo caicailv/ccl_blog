@@ -1,6 +1,6 @@
 <template>
   <div class="win">
-    <div class="list" v-for="item in blogList">
+    <div class="list" v-for="item in blogList" @dblclick="deleteBlogCk(item)">
       <p class="time">{{item.date}}</p>
       <p class="title">{{item.title}}</p>
       <div class="img_row">
@@ -31,7 +31,37 @@ export default {
       return arr;
     }
   },
-  methods: {},
+  methods: {
+    deleteBlogCk(item,index) {
+      this.$confirm("要删除该条内容吗", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          this.deleteBlog(item,index);
+        })
+        .catch(() => {});
+    },
+    deleteBlog(item,index) {
+      this.$axios
+        .post("/delete_blog", {
+          _id:item._id
+        })
+        .then(res => {
+          if (res.status) {
+            this.$message(res.msg);
+            this.blogList.splice(index,1);
+          } else {
+            console.log(res.msg);
+            this.$message('删除错误');
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
+  },
   created() {
     this.$axios
       .get("/query_blog", {
@@ -57,11 +87,26 @@ export default {
     padding-left: 5px;
     border-bottom: 1px solid $theme;
     padding-bottom: 10px;
-    &:last-child{
+    position: relative;
+
+    &:last-child {
       border: none;
     }
-    &+.list{
+    & + .list {
       padding-top: 20px;
+    }
+    .list_btn {
+      position: absolute;
+      $r: 20px;
+      right: $r;
+      top: $r;
+      width: $r;
+      height: $r;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border: 2px solid #fff;
+      border-radius: 50%;
     }
     .time {
       font-size: 24px;

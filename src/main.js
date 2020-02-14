@@ -7,7 +7,6 @@ import 'element-ui/lib/theme-chalk/index.css';
 import '@/assets/css/reset.css';
 import router from './router';
 import '@/assets/js/axios.config';
-import Axios from 'axios';
 //axios配置 
 
 // 公用组件
@@ -19,7 +18,6 @@ Vue.component('List',()=> import('@/components/common/list'));//博客列表
 Vue.component('no-data',()=> import('@/components/common/nodata'));//没有数据展示
 Vue.component('add-blog',()=> import('@/components/common/addBlog'));//新增或编辑内容
 Vue.component('login',()=> import('@/components/common/login'));//登录
-
 
 
 Vue.use(ElementUI, { size: 'small', zIndex: 3000 });
