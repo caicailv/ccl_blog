@@ -64,27 +64,11 @@ export default {
       isEmit: false, //标识编辑还是增加, false 增加 true 编辑
       _id: "", //编辑时,本条内容的_id  00  .
       // 图片上传路径
-      // action="http://localhost:3001/file/uploading"
       imgUpdateUrl: this.$url+"file/uploading"
     };
   },
   computed: {},
   watch: {
-    // 切换时初始化容器
-    addNewType() {
-      // this.imgArr = [];
-
-      // if (this.isEmit) {
-      //   // 编辑,初始化isemit
-      //   this.isEmit = false;
-      // } else {
-      //   // 增加,初始化富文本
-      //   this.content = "";
-      // }
-      // this.$nextTick(() => {
-      //   this.initEditor(this.content);
-      // });
-    }
   },
   methods: {
     // 开启弹窗
@@ -137,6 +121,7 @@ export default {
     // 图片上传成功回调
     successImg(res, file, fileList) {
       this.imgArr.push(res.data.url);
+      console.log(this.imgArr);
     },
     // 删除图片回调
     removeImg(file, fileList) {
