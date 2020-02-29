@@ -46,7 +46,8 @@ export default {
     deleteBlog(item,index) {
       this.$axios
         .post("/delete_blog", {
-          _id:item._id
+          _id:item._id,
+          type:2
         })
         .then(res => {
           if (res.status) {
@@ -66,7 +67,7 @@ export default {
     this.$axios
       .get("/query_blog", {
         params: {
-          type: "图片"
+          type: 2
         }
       })
       .then(res => {

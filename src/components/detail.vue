@@ -1,16 +1,15 @@
 <template>
   <div class="win">
-    <add-blog class="add_blog" ref="add_blog"></add-blog>
     <!-- 博客详情 -->
     <h3 class="title">{{detail.title}}</h3>
     <el-row class="btn_row">
       <el-button type="primary" @click="emit" icon="el-icon-edit" circle></el-button>
       <el-popconfirm title="确定删除该博客吗?" @onConfirm="deleteBlog">
-        <el-button type="danger" icon="el-icon-delete" @click="" slot="reference" circle></el-button>
+        <el-button type="danger" icon="el-icon-delete" slot="reference" circle></el-button>
       </el-popconfirm>
     </el-row>
-    <div class="tips_row">
-      <div class="tips">{{detail.type}}</div>
+    <div class="tips_row" v-if="detail.tips.length!=0">
+      <div class="tips" v-for="item,index in detail.tips" :key="index">{{item}}</div>
     </div>
     <div class="content scroll_style">
       <div class="bod" v-html="detail.content"></div>
@@ -27,41 +26,50 @@ export default {
       _id: ""
     };
   },
+
+  inject: ["appComponents"],
   computed: {},
   methods: {
     emit() {
-      this.$refs.add_blog.addNew(this._id);
-      this.$refs.add_blog.isEmit = true; //标题
-      this.$refs.add_blog.title = this.detail.title; //标题
-      this.$refs.add_blog.addNewType = this.detail.type; //类型
-      this.$refs.add_blog.content = this.detail.content; //内容
+      this.appComponents.addBlog.addNew(this._id);
+      this.appComponents.addBlog.isEmit = true; //标题
+      this.appComponents.addBlog.title = this.detail.title; //标题
+      this.appComponents.addBlog.addNewType = Number(this.type); //类型
+      this.appComponents.addBlog.skillActives = this.detail.tips; //类型
+      this.appComponents.addBlog.content = this.detail.content; //内容
     },
     deleteBlog() {
-      this.$axios.post("/delete_blog",{
-        _id:this._id
-      })
-      .then(res=>{
-        if(res.status){
-          this.$message(res.msg)
-        }else{
-          console.log(res.msg);
-        }
-        setTimeout(() => {
-          this.$router.back(-1);
-        }, 500);
-      })
-      .catch(err=>{
-        console.log(err);
-      })
+      this.appComponents.login.isLoginStatus(() => {
+        this.$axios
+          .post("/delete_blog", {
+            _id: this._id,
+            type: this.type
+          })
+          .then(res => {
+            if (res.status) {
+              this.$message(res.msg);
+            } else {
+              console.log(res.msg);
+            }
+            setTimeout(() => {
+              this.$router.back(-1);
+            }, 500);
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      });
     }
   },
 
   created() {
     this._id = this.$route.query._id;
+    this.type = this.$route.query.type;
     this.$axios
       .get("/query_blogdetail", {
         params: {
-          _id: this._id
+          _id: this._id,
+          type: this.type
         }
       })
       .then(res => {
@@ -69,13 +77,13 @@ export default {
           this.detail = res.data;
         } else {
           this.$message(res.msg);
-          setTimeout(()=>{
+          setTimeout(() => {
             this.$router.back(-1);
-          },500)
+          }, 500);
         }
       })
       .catch(err => {
-        console.log('12312312'+err);
+        console.log("12312312" + err);
       });
   }
 };
@@ -103,6 +111,7 @@ export default {
       line-height: 1;
       padding: 2px;
       display: inline-block;
+      margin-right: 10px;
     }
   }
   .content {

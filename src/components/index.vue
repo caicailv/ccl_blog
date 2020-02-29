@@ -14,26 +14,41 @@
     <div class="_footer">
       <Footer />
     </div>
+    <login ref="login"></login>
+    <add-blog ref="addBlog"></add-blog>
   </div>
 </template>
 
 <script>
+import addBlog from "@/components/common/addBlog";
+import login from "@/components/common/login";
 
 export default {
   name: "index",
+  components: {
+    addBlog,
+    login
+  },
   data() {
     return {};
   },
+  provide() {
+    return {
+      appComponents:this.$refs,
+    };
+  },
   computed: {},
   methods: {},
-  created() {
+  created() {},
+  mounted() {
+    // console.log(this.$refs.login);
   }
 };
 </script>
 
 <style scoped lang="scss">
 .wintt {
- height: 100vh;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   ._head {
@@ -48,6 +63,7 @@ export default {
     position: relative;
     flex: 1;
     overflow: auto;
+    // overflow: hidden;
     .right {
       position: absolute;
       width: 300px;
@@ -58,7 +74,7 @@ export default {
     .bod {
       border-radius: 10px;
       margin-right: 320px;
-      background-color: rgba($color: #000, $alpha: .5);
+      background-color: rgba($color: #000, $alpha: 0.5);
       padding: 1vh 10px;
       box-sizing: border-box;
       height: 100%;

@@ -1,12 +1,8 @@
 <template>
   <div @click="hr_detail(item._id)" class="win">
     <h3 class="title">{{item.title}}</h3>
-    <div class="content" v-if="item.content" v-html="item.content"></div>
-    <div class="img_row" v-if="item.img_arr">
-      <img :src="ite" alt v-for="ite,ind in item.img_arr" :key="ind" />
-    </div>
-    <div class="fot">
-      <div class="tips">{{item.type}}</div>
+    <div class="right">
+      <div class="tips" v-for="ite,inde in item.tips" :key="inde" >{{ite}}</div>
       <p class="time">
         <i class="el-icon-pie-chart"></i>
         {{item.date}}
@@ -21,7 +17,7 @@ export default {
   data() {
     return {};
   },
-  props: ["item"],
+  props: ["item","type"],
   computed: {},
   methods: {
     ellipisContent(text) {
@@ -34,7 +30,8 @@ export default {
       this.$router.push({
         path: "/detail",
         query: {
-          _id
+          _id,
+          type:this.type
         }
       });
     }
@@ -47,29 +44,18 @@ export default {
 .win {
   color: #fff;
   border-bottom: 1px solid #fff;
-  padding: 10px 0 5px;
+  padding: 10px 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
   .title {
     font-size: 22px;
     letter-spacing: 1px;
     padding-bottom: 5px;
+    @include ellipsis(60%,1);
   }
-  .content {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    line-clamp: 2;
-    -webkit-box-orient: vertical;
-  }
-  .img_row {
-    display: flex;
-    align-items: center;
-    img {
-      margin-right: 10px;
-      height: 100px;
-    }
-  }
-  .fot {
+  .right {
     display: flex;
     justify-content: space-between;
     padding-top: 5px;
@@ -79,6 +65,7 @@ export default {
       border-radius: 3px;
       line-height: 1;
       padding: 2px;
+      margin-right: 5px;
     }
     .time {
       text-align: right;

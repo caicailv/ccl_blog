@@ -93,10 +93,6 @@
         </el-card>
       </div>
     </section>
-
-    <!-- 
-
-    -->
     <!-- 技术栈 -->
     <section class="section5">
       <h4 class="title">

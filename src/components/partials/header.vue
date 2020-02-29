@@ -22,7 +22,7 @@
         <el-button type="primary" class="addnewbtn" @click="addNewPop" icon="el-icon-plus">新增内容</el-button>
       </div>
     </div>
-    <add-blog class="add_blog" ref="add_blog"></add-blog>
+    <!-- <add-blog class="add_blog" ref="add_blog"></add-blog> -->
   </div>
 </template>
 
@@ -31,7 +31,7 @@ export default {
   name: "Header",
   data() {
     return {
-      activeIndex: "/about",
+      activeIndex: "/about"
     };
   },
   computed: {},
@@ -47,11 +47,17 @@ export default {
     },
     // 开启弹窗, 用ref拿到子组件实例,操作子组件实例中的方法
     addNewPop() {
-      this.$refs.add_blog.addNew();
+      this.appComponents.addBlog.addNew();
     }
   },
+  inject:['appComponents'],
   created() {
     this.activeIndex = this.$route.path;
+  },
+  mounted() {
+  },
+  beforeCreate() {
+    // console.log("head--- beforeCreate");
   }
 };
 </script>

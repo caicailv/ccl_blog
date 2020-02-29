@@ -1,8 +1,7 @@
 <template>
   <div class="win">
-    <List v-for="item in blogList" :item="item" :key="item.id" />
-      <no-data v-if="blogList.length===0"></no-data>
-
+    <List v-for="item in blogList" :type="0" :item="item" :key="item.id" />
+    <no-data v-if="blogList.length===0"></no-data>
   </div>
 </template>
 
@@ -21,7 +20,7 @@ export default {
     this.$axios
       .get("/query_blog", {
         params: {
-          type: "技术"
+          type: 0
         }
       })
       .then(res => {

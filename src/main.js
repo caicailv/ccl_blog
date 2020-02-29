@@ -16,7 +16,7 @@ Vue.component('Right', () => import('@/components/partials/right'));
 // 复用组件 
 Vue.component('List',()=> import('@/components/common/list'));//博客列表
 Vue.component('no-data',()=> import('@/components/common/nodata'));//没有数据展示
-Vue.component('add-blog',()=> import('@/components/common/addBlog'));//新增或编辑内容
+// Vue.component('add-blog',()=> import('@/components/common/addBlog'));//新增或编辑内容
 Vue.component('login',()=> import('@/components/common/login'));//登录
 
 

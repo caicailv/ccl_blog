@@ -29,14 +29,24 @@ export default {
   data() {
     return {
       show: false,
-      password: ""
+      password: "",
     };
   },
   computed: {},
   methods: {
+    // 验证登录状态
+    isLoginStatus(callback){
+      let token = localStorage.getItem("token");
+      if(!token){
+        this.openPopup();
+      }else{
+        callback(); 
+      }
+    },
+
     openPopup() {
       this.show = true;
-      this.$$nextTick(() => {
+      this.$nextTick(() => {
         // 自动聚焦
         this.$refs.passwordInt.$refs.input.focus();
       });
@@ -63,7 +73,8 @@ export default {
     }
   },
   created() {},
-  mounted() {}
+  mounted() {
+  }
 };
 </script>
 

@@ -1,36 +1,61 @@
-$black:#1c1c1c;
-$theme:#ffd04b;
+$black: #1c1c1c;
+$theme: #ffd04b;
 // 滚动条样式
 .scroll_style {
-    height: 100%;
-    box-sizing: border-box;
-    overflow: auto;
-    &::-webkit-scrollbar {
-      /*滚动条整体样式*/
-      width: 4px; /*高宽分别对应横竖滚动条的尺寸*/
-      height: 4px;
-      scrollbar-arrow-color: red;
-    }
-    &::-webkit-scrollbar-thumb {
-      /*滚动条里面小方块*/
-      border-radius: 5px;
-      box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
-      -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
-      background: rgba(0, 0, 0, 0.2);
-      scrollbar-arrow-color: red;
-    }
-    &::-webkit-scrollbar-track {
-      /*滚动条里面轨道*/
-      box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
-      // -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
-      border-radius: 0;
-      background: rgba(0, 0, 0, 0.1);
-    }
+  height: 100%;
+  box-sizing: border-box;
+  overflow: auto;
+  &::-webkit-scrollbar {
+    /*滚动条整体样式*/
+    width: 4px; /*高宽分别对应横竖滚动条的尺寸*/
+    height: 4px;
+    scrollbar-arrow-color: red;
   }
-body{
-    background-color: $black;
-}
-.win{
-    color: #FFF;
+  &::-webkit-scrollbar-thumb {
+    /*滚动条里面小方块*/
+    border-radius: 5px;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+    -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+    background: rgba(0, 0, 0, 0.2);
+    scrollbar-arrow-color: red;
+  }
+  &::-webkit-scrollbar-track {
+    /*滚动条里面轨道*/
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+    // -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+    border-radius: 0;
+    background: rgba(0, 0, 0, 0.1);
+  }
 }
 
+body {
+  background-color: $black;
+  overflow: hidden;
+  height: 100vh;
+}
+.win {
+  color: #fff;
+}
+// 文字省略
+@mixin wrap($is-wrap: true) {
+  @if $is-wrap == true {
+    word-wrap: break-word;
+    word-break: break-all;
+  } @else {
+    white-space: nowrap;
+  }
+}
+@mixin ellipsis($width: null, $line-clamp: 1) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: $width;
+  @if abs($line-clamp) > 1 {
+    // 要使得多行截取生效，display的值只能为-webkit-box
+    display: -webkit-box !important;
+    -webkit-line-clamp: $line-clamp;
+    @include flex-direction(column);
+    @include wrap;
+  } @else {
+    @include wrap(false);
+  }
+}

@@ -11,17 +11,37 @@
       <div class="row">
         <div class="title">
           <el-form>
-            <div class="title_form_row">
-              <el-input v-model="title" class="title_text" placeholder="请输入标题"></el-input>
-              <div>
-                <el-radio v-model="addNewType" label="技术" border>技术</el-radio>
-                <el-radio v-model="addNewType" label="图片" border>图片</el-radio>
-              </div>
-            </div>
+            <el-form-item>
+              <el-input v-model="title" ref="titile" class="title_text" placeholder="请输入标题"></el-input>
+            </el-form-item>
+            <!-- 内容分类 -->
+            <el-form-item>
+              <el-radio-group v-model="addNewType">
+                <el-radio
+                  v-for="item,index in blogTypes"
+                  :key="index"
+                  border
+                  :label="index"
+                >{{item}}</el-radio>
+              </el-radio-group>
+            </el-form-item>
+            <!-- 技术分类 -->
+            <el-form-item v-if="addNewType===0">
+              <el-checkbox-group v-model="skillActives">
+                <el-checkbox-button
+                  v-for="item,index in skillTypes"
+                  :key="index"
+                  :label="item"
+                  :max="4"
+                  border
+                  size="medium"
+                ></el-checkbox-button>
+              </el-checkbox-group>
+            </el-form-item>
           </el-form>
         </div>
-        <div v-show="addNewType!=='图片'" class="editor_elem" ref="editorElem"></div>
-        <div v-if="addNewType==='图片'">
+        <div v-show="addNewType!==2" class="editor_elem" ref="editorElem" @click="editorElemCk"></div>
+        <div v-if="addNewType===2">
           <el-upload
             :action="imgUpdateUrl"
             list-type="picture-card"
@@ -42,7 +62,6 @@
     <el-dialog :visible.sync="dialogVisible">
       <img width="80%" :src="dialogImageUrl" alt />
     </el-dialog>
-    <login ref="login" @adopt="addNew"></login>
   </div>
 </template>
 
@@ -54,7 +73,24 @@ export default {
   data() {
     return {
       addNewPopup: false,
-      addNewType: '技术', //新增内容类型
+      blogTypes: ["技术", "随笔", "图片"],
+      // 技术标签
+      skillTypes: [
+        "HTML",
+        "CSS",
+        "JS",
+        "微信小程序",
+        "webpack",
+        "数据结构",
+        "算法",
+        "VUE",
+        "React",
+        "TypeScript",
+        "Node",
+        "Mongod"
+      ],
+      skillActives: [], //选中的技术标签
+      addNewType: 0, //新增内容类型
       dialogImageUrl: "", // 图片展示器,路径容器
       editor: null, //存储富文本编辑器元素
       dialogVisible: false, // 图片展示器显示隐藏
@@ -64,29 +100,31 @@ export default {
       isEmit: false, //标识编辑还是增加, false 增加 true 编辑
       _id: "", //编辑时,本条内容的_id  00  .
       // 图片上传路径
-      imgUpdateUrl: this.$url+"file/uploading"
+      imgUpdateUrl: this.$url + "file/uploading"
     };
   },
   computed: {},
-  watch: {
-  },
+  watch: {},
   methods: {
+    editorElemCk() {
+      // console.log(123);
+    },
     // 开启弹窗
     addNew(_id) {
-      // 判断登录状态
-      let token = localStorage.getItem("token");
       // 暂时取消登录相关功能
+      // 判断登录状态
+      // let token = localStorage.getItem("token");
       // if (!token) {
       //   return this.$refs.login.openPopup();
       // }
       // 编辑
       if (_id) {
-        console.log(_id);
         this.isEmit = true;
       }
       this.addNewPopup = true;
       setTimeout(() => {
         this.initEditor();
+        this.$refs.titile.$refs.input.focus();
       }, 1);
     },
     initAddNew() {},
@@ -134,19 +172,22 @@ export default {
     },
     // 保存
     saveAddNew() {
-      if (this.addNewType === "") return this.$message("请选择新增内容的类型");
       if (this.title === undefined || this.title === "") {
         return this.$message("请输入标题");
       }
-      // 图片
-      if (this.addNewType === "图片" && this.imgArr.length == 0)
-        return this.$message("请至少上传一张图片");
-      //技术
-      if (
-        this.addNewType === "技术" &&
-        (this.content === undefined || this.content === "")
-      )
-        return this.$message("请输入内容");
+      switch (this.addNewType) {
+        case 0:
+        case 1:
+          if (this.content === undefined || this.content === "") {
+            return this.$message("请输入内容");
+          }
+          break;
+        case 2:
+          if (this.imgArr.length === 0) {
+            return this.$message("请至少上传一张图片");
+          }
+          break;
+      }
       let url = this.isEmit ? "/emit_blog" : "/add_blog";
       this.$axios
         .post(url, {
@@ -154,6 +195,7 @@ export default {
           title: this.title,
           content: this.content,
           img_arr: this.imgArr,
+          skillActives: this.skillActives,
           _id: this._id || ""
         })
         .then(res => {
@@ -161,7 +203,7 @@ export default {
             this.$message(this.isEmit ? "修改成功" : "上传成功");
             this.title = "";
             this.addNewPopup = false;
-            location.reload()
+            // location.reload();
           } else {
             this.$message(res.msg);
           }
@@ -175,7 +217,7 @@ export default {
     this.$nextTick(() => {
       this.initEditor();
     });
-  }
+  },
 };
 </script>
 
@@ -199,9 +241,9 @@ export default {
       }
 
       >>> .w-e-text-container {
-        height: auto !important;
-        min-height: 200px !important;
-        max-height: 250px !important;
+        // height: auto !important;
+        // min-height: 200px !important;
+        // max-height: 250px !important;
         overflow-y: auto;
       }
       >>> .w-e-text::-webkit-scrollbar {
@@ -210,6 +252,9 @@ export default {
       >>> .w-e-text-container::-webkit-scrollbar {
         display: none;
       }
+      // >>> .w-e-text p{
+      //   min-height: 200px;
+      // }
     }
   }
 }
