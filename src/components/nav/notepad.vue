@@ -16,20 +16,31 @@ export default {
     };
   },
   computed: {},
-  methods: {},
-  created() {
-    this.$axios
-      .get("/query_blog", {
-        params: {
-          type: 1
-        }
-      })
-      .then(res => {
-        this.blogList = res.data;
-      })
-      .catch(err => {
-        console.log(err);
+  methods: {
+    getList() {
+      this.$axios
+        .get("/query_blog", {
+          params: {
+            type: 1
+          }
+        })
+        .then(res => {
+          this.blogList = res.data;
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    // 监听新增内容,更新博客
+    onSave() {
+      this.$bus.$on("on-save", () => {
+        this.getList();
       });
+    }
+  },
+  created() {
+    this.getList();
+    this.onSave();
   }
 };
 </script>

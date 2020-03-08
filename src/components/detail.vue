@@ -8,35 +8,50 @@
         <el-button type="danger" icon="el-icon-delete" slot="reference" circle></el-button>
       </el-popconfirm>
     </el-row>
-    <div class="tips_row" v-if="detail.tips.length!=0">
+    <div class="tips_row" v-if="detail.tips&&detail.tips.length!=0">
       <div class="tips" v-for="item,index in detail.tips" :key="index">{{item}}</div>
     </div>
-    <div class="content scroll_style">
-      <div class="bod" v-html="detail.content"></div>
+    <div class="content">
+      <mavonEditor
+        v-model="detail.content"
+        defaultOpen="preview"
+        :toolbarsFlag="false"
+        :subfield="false"
+        :editable="false"
+      />
     </div>
   </div>
 </template>
 
 <script>
+import { mavonEditor } from "mavon-editor";
+import "mavon-editor/dist/css/index.css";
+import utils from "@/assets/js/utils.js";
+let findBrothersComponents = utils.findBrothersComponents;
 export default {
-  name: "Newlyadd",
+  name: "detail",
   data() {
     return {
       detail: {},
+      type: 0,
       _id: ""
     };
   },
 
   inject: ["appComponents"],
+  components: {
+    mavonEditor
+  },
+
   computed: {},
   methods: {
     emit() {
-      this.appComponents.addBlog.addNew(this._id);
-      this.appComponents.addBlog.isEmit = true; //标题
-      this.appComponents.addBlog.title = this.detail.title; //标题
-      this.appComponents.addBlog.addNewType = Number(this.type); //类型
-      this.appComponents.addBlog.skillActives = this.detail.tips; //类型
-      this.appComponents.addBlog.content = this.detail.content; //内容
+      let detail = {
+        ...this.detail,
+        _id: this._id,
+        type: this.type
+      };
+      this.appComponents.addBlog.emit(detail);
     },
     deleteBlog() {
       this.appComponents.login.isLoginStatus(() => {
@@ -64,7 +79,7 @@ export default {
 
   created() {
     this._id = this.$route.query._id;
-    this.type = this.$route.query.type;
+    this.type = Number(this.$route.query.type);
     this.$axios
       .get("/query_blogdetail", {
         params: {
@@ -83,8 +98,12 @@ export default {
         }
       })
       .catch(err => {
-        console.log("12312312" + err);
+        console.log(err);
       });
+  },
+  mounted() {},
+  destroyed() {
+    findBrothersComponents(this, "Header")[0].updateMenuActive();
   }
 };
 </script>
@@ -115,18 +134,7 @@ export default {
     }
   }
   .content {
-    padding: 10px;
-    border: 1px solid #fff;
-    border-radius: 5px;
-    flex: 1;
-    overflow: auto;
-
-    position: relative;
-    .copy {
-      position: absolute;
-      right: 10px;
-      top: 5px;
-    }
+    border-radius: 10px;
   }
 }
 </style>

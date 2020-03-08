@@ -2,13 +2,19 @@ $black: #1c1c1c;
 $theme: #ffd04b;
 // 滚动条样式
 .scroll_style {
+  // cursor: n-resize;
+  // cursor: n-resize;
+  // cursor: n-resize;
+  // cursor: n-resize;
+  // cursor: n-resize;
+  cursor: n-resize;
   height: 100%;
   box-sizing: border-box;
   overflow: auto;
   &::-webkit-scrollbar {
     /*滚动条整体样式*/
-    width: 4px; /*高宽分别对应横竖滚动条的尺寸*/
-    height: 4px;
+    width: 8px; /*高宽分别对应横竖滚动条的尺寸*/
+    height: 8px;
     scrollbar-arrow-color: red;
   }
   &::-webkit-scrollbar-thumb {

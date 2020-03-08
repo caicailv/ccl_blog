@@ -34,14 +34,13 @@ export default {
   },
   provide() {
     return {
-      appComponents:this.$refs,
+      appComponents: this.$refs
     };
   },
   computed: {},
   methods: {},
   created() {},
   mounted() {
-    // console.log(this.$refs.login);
   }
 };
 </script>

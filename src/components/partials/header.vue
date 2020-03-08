@@ -45,17 +45,20 @@ export default {
         }
       });
     },
+    // 更新导航选中
+    updateMenuActive() {
+      this.activeIndex = this.$route.path;
+    },
     // 开启弹窗, 用ref拿到子组件实例,操作子组件实例中的方法
     addNewPop() {
       this.appComponents.addBlog.addNew();
     }
   },
-  inject:['appComponents'],
+  inject: ["appComponents"],
   created() {
-    this.activeIndex = this.$route.path;
+    this.updateMenuActive();
   },
-  mounted() {
-  },
+  mounted() {},
   beforeCreate() {
     // console.log("head--- beforeCreate");
   }

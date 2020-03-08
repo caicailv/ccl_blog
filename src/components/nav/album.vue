@@ -32,50 +32,60 @@ export default {
     }
   },
   methods: {
-    deleteBlogCk(item,index) {
+    deleteBlogCk(item, index) {
       this.$confirm("要删除该条内容吗", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
       })
         .then(() => {
-          this.deleteBlog(item,index);
+          this.deleteBlog(item, index);
         })
         .catch(() => {});
     },
-    deleteBlog(item,index) {
+    deleteBlog(item, index) {
       this.$axios
         .post("/delete_blog", {
-          _id:item._id,
-          type:2
+          _id: item._id,
+          type: 2
         })
         .then(res => {
           if (res.status) {
             this.$message(res.msg);
-            this.blogList.splice(index,1);
+            this.blogList.splice(index, 1);
           } else {
             console.log(res.msg);
-            this.$message('删除错误');
+            this.$message("删除错误");
           }
         })
         .catch(err => {
           console.log(err);
         });
+    },
+    getList() {
+      this.$axios
+        .get("/query_blog", {
+          params: {
+            type: 2
+          }
+        })
+        .then(res => {
+          this.blogList = res.data;
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    // 监听新增内容,更新博客
+    onSave() {
+      this.$bus.$on("on-save", () => {
+        this.getList();
+      });
     }
   },
   created() {
-    this.$axios
-      .get("/query_blog", {
-        params: {
-          type: 2
-        }
-      })
-      .then(res => {
-        this.blogList = res.data;
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    this.getList();
+    this.onSave();
   }
 };
 </script>

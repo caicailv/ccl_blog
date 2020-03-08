@@ -3,7 +3,7 @@
     <!-- 添加.编辑内容 -->
     <el-dialog
       :visible.sync="addNewPopup"
-      width="70%"
+      width="90%"
       :before-close="()=>{addNewPopup=false}"
       :close-on-click-modal="false"
       class="add_new_pop"
@@ -40,7 +40,16 @@
             </el-form-item>
           </el-form>
         </div>
-        <div v-show="addNewType!==2" class="editor_elem" ref="editorElem" @click="editorElemCk"></div>
+        <div class="emit_content scroll_style" v-show="addNewType!==2">
+          <mavonEditor
+            defaultOpen="edit"
+            :subfield="false"
+            v-model="content"
+            ref="md"
+            @fullScreen="fullScreenChange"
+          />
+        </div>
+
         <div v-if="addNewType===2">
           <el-upload
             :action="imgUpdateUrl"
@@ -66,8 +75,8 @@
 </template>
 
 <script>
-import E from "wangeditor";
-
+import { mavonEditor } from "mavon-editor";
+import "mavon-editor/dist/css/index.css";
 export default {
   name: "addBlog",
   data() {
@@ -103,14 +112,31 @@ export default {
       imgUpdateUrl: this.$url + "file/uploading"
     };
   },
+  components: {
+    mavonEditor
+  },
   computed: {},
   watch: {},
   methods: {
-    editorElemCk() {
-      // console.log(123);
+    // 切换全屏状态开启关闭
+    fullScreenChange(status) {
+      let headElement = document.querySelector(".v-note-op");
+      headElement.style.position = status ? "static" : "sticky";
+    },
+    // 编辑
+    emit(detail) {
+      this.isEmit = true;
+      this.title = detail.title;
+      this._id = detail._id;
+      this.addNewType = detail.type;
+      this.content = detail.content;
+      if (this.addNewType === 0) {
+        this.skillActives = detail.tips;
+      }
+      this.addNew();
     },
     // 开启弹窗
-    addNew(_id) {
+    addNew() {
       // 暂时取消登录相关功能
       // 判断登录状态
       // let token = localStorage.getItem("token");
@@ -118,43 +144,10 @@ export default {
       //   return this.$refs.login.openPopup();
       // }
       // 编辑
-      if (_id) {
-        this.isEmit = true;
-      }
       this.addNewPopup = true;
-      setTimeout(() => {
-        this.initEditor();
+      this.$nextTick(() => {
         this.$refs.titile.$refs.input.focus();
-      }, 1);
-    },
-    initAddNew() {},
-    // 初始化富文本编辑器
-    initEditor(text = "") {
-      if (this.addNewPopup === false) return;
-      this.editor = new E(this.$refs.editorElem);
-      this.editor.customConfig.onchange = html => {
-        this.content = html;
-      };
-      this.editor.customConfig.uploadImgShowBase64 = true;
-      this.editor.customConfig.zIndex = 100;
-      this.editor.customConfig.menus = [
-        "bold",
-        "fontSize",
-        "fontName",
-        "italic",
-        "underline",
-        "foreColor",
-        "backColor",
-        "link",
-        "list",
-        "justify",
-        "quote",
-        "image",
-        "table",
-        "code"
-      ];
-      this.editor.create();
-      this.editor.txt.html(text);
+      });
     },
     // 图片上传成功回调
     successImg(res, file, fileList) {
@@ -172,6 +165,7 @@ export default {
     },
     // 保存
     saveAddNew() {
+      // 广播事件
       if (this.title === undefined || this.title === "") {
         return this.$message("请输入标题");
       }
@@ -203,6 +197,8 @@ export default {
             this.$message(this.isEmit ? "修改成功" : "上传成功");
             this.title = "";
             this.addNewPopup = false;
+            // 广播保存成功
+            this.$bus.$emit("on-save");
             // location.reload();
           } else {
             this.$message(res.msg);
@@ -215,9 +211,9 @@ export default {
   },
   created() {
     this.$nextTick(() => {
-      this.initEditor();
+      // this.initEditor();
     });
-  },
+  }
 };
 </script>
 
@@ -236,25 +232,25 @@ export default {
           }
         }
       }
-      .editor_elem {
-        text-align: left;
-      }
-
-      >>> .w-e-text-container {
-        // height: auto !important;
-        // min-height: 200px !important;
-        // max-height: 250px !important;
+      .emit_content {
+        max-height: 180px;
         overflow-y: auto;
+        position: relative;
+        &::-webkit-scrollbar {
+          /*滚动条整体样式*/
+          width: 7px; /*高宽分别对应横竖滚动条的尺寸*/
+          height: 7px;
+          scrollbar-arrow-color: red;
+        }
+        .v-note-wrapper {
+          min-height: 180px;
+          // position: relative;
+        }
+        >>> .v-note-op {
+          position: sticky;
+          top: 0;
+        }
       }
-      >>> .w-e-text::-webkit-scrollbar {
-        display: none;
-      }
-      >>> .w-e-text-container::-webkit-scrollbar {
-        display: none;
-      }
-      // >>> .w-e-text p{
-      //   min-height: 200px;
-      // }
     }
   }
 }

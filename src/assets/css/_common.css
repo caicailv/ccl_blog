@@ -1,5 +1,6 @@
 @charset "UTF-8";
 .scroll_style {
+  cursor: n-resize;
   height: 100%;
   box-sizing: border-box;
   overflow: auto;
@@ -7,9 +8,9 @@
 
 .scroll_style::-webkit-scrollbar {
   /*滚动条整体样式*/
-  width: 4px;
+  width: 8px;
   /*高宽分别对应横竖滚动条的尺寸*/
-  height: 4px;
+  height: 8px;
   scrollbar-arrow-color: red;
 }
 
@@ -31,8 +32,10 @@
 
 body {
   background-color: #1c1c1c;
+  overflow: hidden;
+  height: 100vh;
 }
 
 .win {
-  color: #FFF;
+  color: #fff;
 }

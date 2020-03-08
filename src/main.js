@@ -7,8 +7,8 @@ import 'element-ui/lib/theme-chalk/index.css';
 import '@/assets/css/reset.css';
 import router from './router';
 import '@/assets/js/axios.config';
-//axios配置 
-
+import bus from '@/assets/js/bus';
+Vue.prototype.$bus = bus;
 // 公用组件
 Vue.component('Header', () => import("@/components/partials/header"));
 Vue.component('Footer', () => import('@/components/partials/footer'));
@@ -20,7 +20,7 @@ Vue.component('no-data',()=> import('@/components/common/nodata'));//没有数�
 Vue.component('login',()=> import('@/components/common/login'));//登录
 
 
-Vue.use(ElementUI, { size: 'small', zIndex: 3000 });
+Vue.use(ElementUI, { size: 'small', zIndex: 1000 });
 Vue.config.productionTip = false
 /* eslint-disable no-new */
 new Vue({
