@@ -74,32 +74,39 @@ export default {
             console.log(err);
           });
       });
+    },
+    getDetail() {
+      this.$axios
+        .get("/query_blogdetail", {
+          params: {
+            _id: this._id,
+            type: this.type
+          }
+        })
+        .then(res => {
+          if (res.status) {
+            this.detail = res.data;
+          } else {
+            this.$message(res.msg);
+            setTimeout(() => {
+              this.$router.back(-1);
+            }, 500);
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    onEmit(){
+      this.$bus.$on("on-emit", () => {
+        this.getDetail();
+      });
     }
   },
 
   created() {
     this._id = this.$route.query._id;
     this.type = Number(this.$route.query.type);
-    this.$axios
-      .get("/query_blogdetail", {
-        params: {
-          _id: this._id,
-          type: this.type
-        }
-      })
-      .then(res => {
-        if (res.status) {
-          this.detail = res.data;
-        } else {
-          this.$message(res.msg);
-          setTimeout(() => {
-            this.$router.back(-1);
-          }, 500);
-        }
-      })
-      .catch(err => {
-        console.log(err);
-      });
   },
   mounted() {},
   destroyed() {

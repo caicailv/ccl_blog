@@ -10,7 +10,7 @@ export default {
   name: "Notepad",
   data() {
     return {
-      type: "",
+      type: 1,
       total: 99,
       blogList: []
     };
@@ -21,7 +21,7 @@ export default {
       this.$axios
         .get("/query_blog", {
           params: {
-            type: 1
+            type: this.type
           }
         })
         .then(res => {
@@ -33,8 +33,8 @@ export default {
     },
     // 监听新增内容,更新博客
     onSave() {
-      this.$bus.$on("on-save", () => {
-        this.getList();
+      this.$bus.$on("on-save", type => {
+        if (this.type === type) this.getList();
       });
     }
   },

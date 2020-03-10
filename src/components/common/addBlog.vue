@@ -125,15 +125,12 @@ export default {
     },
     // 新增内容
     addblog() {
-      if (this.isEmit) {
-        this.isEmit = false;
-        this.title = "";
-        this._id = "";
-        this.addNewType = 0;
-        this.content = "";
-        this.skillActives = [];
-        
-      }
+      this.isEmit = false;
+      this.title = "";
+      this._id = "";
+      this.addNewType = 0;
+      this.content = "";
+      this.skillActives = [];
       this.addNew();
     },
     // 编辑
@@ -178,7 +175,6 @@ export default {
     },
     // 保存
     saveAddNew() {
-      // 广播事件
       if (this.title === undefined || this.title === "") {
         return this.$message("请输入标题");
       }
@@ -210,9 +206,12 @@ export default {
             this.$message(this.isEmit ? "修改成功" : "上传成功");
             this.title = "";
             this.addNewPopup = false;
-            // 广播保存成功
-            this.$bus.$emit("on-save");
-            // location.reload();
+            // 广播保存成功/修改成功
+            if (this.isEmit) {
+              this.$bus.$emit("on-emit");
+            } else {
+              this.$bus.$emit("on-save", this.addNewType);
+            }
           } else {
             this.$message(res.msg);
           }
@@ -222,11 +221,7 @@ export default {
         });
     }
   },
-  created() {
-    this.$nextTick(() => {
-      // this.initEditor();
-    });
-  }
+  created() {}
 };
 </script>
 

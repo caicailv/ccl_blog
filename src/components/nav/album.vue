@@ -19,7 +19,8 @@ export default {
   data() {
     return {
       blogList: [],
-      imgList: []
+      imgList: [],
+      type: 2
     };
   },
   computed: {
@@ -47,7 +48,7 @@ export default {
       this.$axios
         .post("/delete_blog", {
           _id: item._id,
-          type: 2
+          type: this.type
         })
         .then(res => {
           if (res.status) {
@@ -66,7 +67,7 @@ export default {
       this.$axios
         .get("/query_blog", {
           params: {
-            type: 2
+            type: this.type
           }
         })
         .then(res => {
@@ -78,8 +79,8 @@ export default {
     },
     // 监听新增内容,更新博客
     onSave() {
-      this.$bus.$on("on-save", () => {
-        this.getList();
+      this.$bus.$on("on-save", type => {
+        if (this.type === type) this.getList();
       });
     }
   },

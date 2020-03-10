@@ -10,7 +10,7 @@ export default {
   name: "Skill",
   data() {
     return {
-      type: "",
+      type: 0,
       blogList: []
     };
   },
@@ -20,7 +20,7 @@ export default {
       this.$axios
         .get("/query_blog", {
           params: {
-            type: 0
+            type: this.type
           }
         })
         .then(res => {
@@ -32,8 +32,8 @@ export default {
     },
     // 监听新增内容,更新博客
     onSave() {
-      this.$bus.$on("on-save", () => {
-        this.getList();
+      this.$bus.$on("on-save", type => {
+        if (this.type === type) this.getList();
       });
     }
   },
