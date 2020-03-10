@@ -107,9 +107,12 @@ export default {
   created() {
     this._id = this.$route.query._id;
     this.type = Number(this.$route.query.type);
+    this.getDetail();
+    this.onEmit();
   },
   mounted() {},
   destroyed() {
+    // 离开时更新导航选中
     findBrothersComponents(this, "Header")[0].updateMenuActive();
   }
 };
