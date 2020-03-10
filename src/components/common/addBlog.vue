@@ -123,6 +123,19 @@ export default {
       let headElement = document.querySelector(".v-note-op");
       headElement.style.position = status ? "static" : "sticky";
     },
+    // 新增内容
+    addblog() {
+      if (this.isEmit) {
+        this.isEmit = false;
+        this.title = "";
+        this._id = "";
+        this.addNewType = 0;
+        this.content = "";
+        this.skillActives = [];
+        
+      }
+      this.addNew();
+    },
     // 编辑
     emit(detail) {
       this.isEmit = true;

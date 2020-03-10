@@ -51,7 +51,7 @@ export default {
     },
     // 开启弹窗, 用ref拿到子组件实例,操作子组件实例中的方法
     addNewPop() {
-      this.appComponents.addBlog.addNew();
+      this.appComponents.addBlog.addblog();
     }
   },
   inject: ["appComponents"],
