@@ -1,6 +1,6 @@
 <template>
   <div class="win">
-    © 2019 www.caicailv.cn 菜菜驴
+    <a href="http://www.beian.miit.gov.cn">© 2019 www.caicailv.cn 菜菜驴</a>
   </div>
 </template>
 
@@ -8,25 +8,20 @@
 export default {
   name: "Footer",
   data() {
-    return {
-      
-    };
+    return {};
   },
-  computed:{
-
-  },
-  methods:{
-
-  },
-  created(){
-
-  }
+  computed: {},
+  methods: {},
+  created() {}
 };
 </script>
 
 <style scoped lang="scss">
-.win{
+.win {
   text-align: center;
   padding-bottom: 10px;
+  a{
+    color: #fff;
+  }
 }
 </style>

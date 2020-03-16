@@ -138,13 +138,15 @@ export default {
       background-color: $theme;
       border-radius: 3px;
       line-height: 1;
-      padding: 2px;
+      padding: 3px 5rpx;
       display: inline-block;
       margin-right: 10px;
     }
   }
   .content {
     border-radius: 10px;
+    position: relative;
+    z-index: 1;
   }
 }
 </style>
