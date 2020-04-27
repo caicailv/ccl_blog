@@ -15,7 +15,7 @@
       <Footer />
     </div>
     <login ref="login"></login>
-    <add-blog ref="addBlog"></add-blog>
+    <add-blog :cclFunction="cclFunction" :ccltext="'gagaga'" ref="addBlog"></add-blog>
   </div>
 </template>
 
@@ -38,10 +38,15 @@ export default {
     };
   },
   computed: {},
-  methods: {},
-  created() {},
-  mounted() {
-  }
+  methods: {
+    cclFunction(context) {
+      console.log(context.$options.name);                                                        
+    }
+  },
+  created() {
+    console.log(this.$aaa)
+  },
+  mounted() {}
 };
 </script>
 

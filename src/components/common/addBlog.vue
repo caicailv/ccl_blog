@@ -18,7 +18,7 @@
             <el-form-item>
               <el-radio-group v-model="addNewType">
                 <el-radio
-                  v-for="item,index in blogTypes"
+                  v-for="(item,index) in blogTypes"
                   :key="index"
                   border
                   :label="index"
@@ -81,6 +81,7 @@ export default {
   name: "addBlog",
   data() {
     return {
+      aaa: "aaa",
       addNewPopup: false,
       blogTypes: ["技术", "随笔", "图片"],
       // 技术标签
@@ -115,6 +116,7 @@ export default {
   components: {
     mavonEditor
   },
+  props: ["cclFunction", "ccltext"],
   computed: {},
   watch: {},
   methods: {
@@ -221,7 +223,11 @@ export default {
         });
     }
   },
-  created() {}
+  mounted() {
+    // this.cclFunction.call(this);
+    // let bbb = this.cclFunction.bind(this);
+    // bbb();
+  }
 };
 </script>
 

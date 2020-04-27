@@ -1,6 +1,6 @@
 <template>
   <div class="win">
-    <a href="http://www.beian.miit.gov.cn">© 2019 www.caicailv.cn 菜菜驴</a>
+    <a href="http://www.beian.miit.gov.cn">© 2019 www.caicailv.cn 菜菜驴 辽ICP备18015879号</a>
   </div>
 </template>
 
